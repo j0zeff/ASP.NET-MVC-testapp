@@ -1,0 +1,40 @@
+﻿@model ASP.NET_MVC_testapp.Models.Library
+@{
+    ViewData["title"] = "Books Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="text-center">
+    <h1 class="display-4">Book information</h1>
+    <p>Learn about book you are interested in</p>
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">#</th>
+                <th scope="col">title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Pages</th>
+            </t>
+        </thead>
+        <tbody>
+
+            @{
+                int i = 1;
+                foreach (var book in Model.books)
+                {
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td>@book.Title</td>
+                        <td>@book.AuthorName</td>
+                        <td>@book.Pages</td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+

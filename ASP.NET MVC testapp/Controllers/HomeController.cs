@@ -1,6 +1,7 @@
 ﻿using ASP.NET_MVC_testapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using MySql.Data.MySqlClient;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
