@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_MVC_testapp.Models;
+using ASP.NET_MVC_testapp.Repositoty;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
@@ -19,11 +20,10 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> IndexLib()
+        public IActionResult IndexLib()
         {
-            return _context.Books != null ?
-                        View(await _context.Books.ToListAsync()) :
-                        Problem("Entity set 'MyDbContext.Books'  is null.");
+            var books = new BookRepository(_context);
+            return View(books.Books);
         }
 
         // GET: Books/Details/5
