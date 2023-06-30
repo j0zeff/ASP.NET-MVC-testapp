@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ASP.NET_MVC_testapp.Models.Book>
+﻿@model ICollection<ASP.NET_MVC_testapp.Models.Book>
 
 @{
     ViewData["title"] = "IndexLib";
@@ -12,27 +12,27 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
+        <tr class="table-dark">
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AuthorName)
+                Author
+            </th>
+@*            <th>
+                AuthorSurname
+            </th>*@
+@*            <th>
+                Pages
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AuthorSurname)
+               Genre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Pages)
-            </th>
+                BookDescription
+            </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BookDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
+               ReleaseDate
             </th>
             <th></th>
         </tr>
@@ -43,21 +43,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            <td>
+@*            <td>
                 @Html.DisplayFor(modelItem => item.AuthorName)
-            </td>
+            </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.AuthorSurname)
+                    @Html.DisplayFor(modelItem => item.AuthorName) @Html.DisplayFor(modelItem => item.AuthorSurname)
             </td>
-            <td>
+@*            <td>
                 @Html.DisplayFor(modelItem => item.Pages)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
+            </td>*@
+@*            <td>
                 @Html.DisplayFor(modelItem => item.BookDescription)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.ReleaseDate)
             </td>
