@@ -50,7 +50,7 @@
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"/>
+                <button type="button" id="saveButton" class="btn btn-primary">Save</button>
             </div>
         </form>
     </div>
@@ -61,5 +61,21 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(function () {
+            $('#saveButton').click(function () {
+                $.ajax({
+                    url: '@Url.Action("Edit", "Books")',
+                    type: 'POST',
+                    data: $('form').serialize(),
+                    success: function (result) {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
 }
