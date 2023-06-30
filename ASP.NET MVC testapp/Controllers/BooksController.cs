@@ -61,9 +61,9 @@ namespace ASP.NET_MVC_testapp.Controllers
             {
                 _context.Add(book);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("IndexLib");
             }
-            return View(book);
+            return RedirectToAction("IndexLib");
         }
 
         // GET: Books/Edit/5
@@ -151,7 +151,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("IndexLib");
         }
 
         private bool BookExists(int id)
