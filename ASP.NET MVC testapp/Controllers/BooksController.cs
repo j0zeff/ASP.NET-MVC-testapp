@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_MVC_testapp.Models;
-using ASP.NET_MVC_testapp.Repositoty;
+using ASP.NET_MVC_testapp.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly MyDbContext _context;
@@ -45,6 +47,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books/Create
+        
         public IActionResult Create()
         {
             return View();

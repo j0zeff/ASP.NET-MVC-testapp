@@ -1,5 +1,11 @@
-﻿using ASP.NET_MVC_testapp.Repositoty;
+﻿using ASP.NET_MVC_testapp.Repository;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using System.Configuration;
+using Microsoft.AspNetCore.Identity;
 
 namespace ASP.NET_MVC_testapp
 {
@@ -17,11 +23,10 @@ namespace ASP.NET_MVC_testapp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyDbContext>(options => options.UseSqlServer(_confString.GetConnectionString("MyDbContext")));
-           
         }
         public void Configure(IApplicationBuilder app)
         {
-            
+
         }
     }
 }

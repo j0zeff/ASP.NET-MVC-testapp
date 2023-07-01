@@ -1,7 +1,7 @@
 ﻿using ASP.NET_MVC_testapp.Models;
 using System.Linq;
 
-namespace ASP.NET_MVC_testapp.Repositoty
+namespace ASP.NET_MVC_testapp.Repository
 {
     public class BookRepository : BookInterface
     
