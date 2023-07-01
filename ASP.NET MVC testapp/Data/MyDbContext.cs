@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_MVC_testapp.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class MyDbContext : DbContext
+public class MyDbContext : IdentityDbContext
 {
     private readonly IConfiguration _configuration;
 
