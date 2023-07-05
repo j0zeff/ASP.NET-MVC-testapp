@@ -17,8 +17,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MyDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbContext")));
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders().AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<MyDbContext>();
+
+
 
 
 var app = builder.Build();
