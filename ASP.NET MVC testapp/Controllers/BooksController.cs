@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
-    [Authorize (Roles = "User") ]
+    
     public class BooksController : Controller
     {
         private readonly MyDbContext _context;
