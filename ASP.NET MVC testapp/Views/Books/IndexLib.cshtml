@@ -1,4 +1,4 @@
-﻿@model ICollection<ASP.NET_MVC_testapp.Models.Book>
+﻿@model ASP.NET_MVC_testapp.Models.MainViewModel
 
 
 @{
@@ -11,68 +11,121 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr class="table-dark">
-            <th>
-                Title
-            </th>
-            <th>
-                Author
-            </th>
-@*            <th>
+<form method="get" asp-action="IndexLib" asp-controller="Books">
+    <div class="form-group">
+        <label class="col-form-label mt-4" for="inputDefault">Default input</label>
+        <input type="text" class="form-control" placeholder="Default input" name="inputDefault">
+    </div>
+    <button type="submit">Submit</button>
+</form>
+<div id="datatable">
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th>
+                    Title
+                </th>
+                <th>
+                    Author
+                </th>
+                @*            <th>
                 AuthorSurname
-            </th>*@
-@*            <th>
+                </th>*@
+                @*            <th>
                 Pages
-            </th>
-            <th>
-               Genre
-            </th>
-            <th>
+                </th>
+                <th>
+                Genre
+                </th>
+                <th>
                 BookDescription
-            </th>*@
-            <th>
-               ReleaseDate
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-@*            <td>
+                </th>*@
+                <th>
+                    ReleaseDate
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Booklist.Count != 0)
+            {
+                foreach (var item in Model.Booklist)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        @*            <td>
                 @Html.DisplayFor(modelItem => item.AuthorName)
-            </td>*@
-            <td>
-                    @Html.DisplayFor(modelItem => item.AuthorName) @Html.DisplayFor(modelItem => item.AuthorSurname)
-            </td>
-@*            <td>
+                </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AuthorName) @Html.DisplayFor(modelItem => item.AuthorSurname)
+                        </td>
+                        @*            <td>
                 @Html.DisplayFor(modelItem => item.Pages)
-            </td>
-            <td>
+                </td>
+                <td>
                 @Html.DisplayFor(modelItem => item.Genre)
-            </td>*@
-@*            <td>
+                </td>*@
+                        @*            <td>
                 @Html.DisplayFor(modelItem => item.BookDescription)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-				<td>
-					<a asp-action="Details" asp-route-id="@item.BookId">Details</a>
-                    @if (User.IsInRole("Admin"))
-                    {
-                    <text>
-                        <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
-                    </text>
-                    }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReleaseDate)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.BookId">Details</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <text>
+                                    <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
+                                </text>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                @foreach (var item in Model.Bookrepository.Books)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        @*            <td>
+                @Html.DisplayFor(modelItem => item.AuthorName)
+                </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AuthorName) @Html.DisplayFor(modelItem => item.AuthorSurname)
+                        </td>
+                        @*            <td>
+                @Html.DisplayFor(modelItem => item.Pages)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => item.Genre)
+                </td>*@
+                        @*            <td>
+                @Html.DisplayFor(modelItem => item.BookDescription)
+                </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReleaseDate)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.BookId">Details</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <text>
+                                    <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
+                                </text>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ASP.NET_MVC_testapp.Models;
 using ASP.NET_MVC_testapp.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
@@ -22,12 +23,34 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books
-        public IActionResult IndexLib()
+        [HttpGet]
+        public IActionResult IndexLib(string inputDefault)
         {
             var books = new BookRepository(_context);
-            return View(books.Books);
+            var filter = new BookFilters();
+            var book_query = _context.Books.AsQueryable();
+            filter.Author_name = inputDefault;
+            if(!string.IsNullOrEmpty(filter.Author_name))
+            {
+                book_query = book_query.Where(b => b.AuthorName == filter.Author_name);
+            }
+            if (!string.IsNullOrEmpty(filter.Author_surname))
+            {
+                book_query = book_query.Where(b => b.AuthorSurname == filter.Author_surname);
+            }
+            if (!string.IsNullOrEmpty(filter.Genre))
+            {
+                book_query = book_query.Where(b => b.Genre == filter.Genre);
+            }
+            if (!string.IsNullOrEmpty(filter.ReleaseDate))
+            {
+                book_query = book_query.Where(b => b.ReleaseDate.ToString() == filter.ReleaseDate);
+            }
+            var bookslist = book_query.ToList();
+            var result = new MainViewModel(filter, books, bookslist);
+            return View(result);
         }
-
+        
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
