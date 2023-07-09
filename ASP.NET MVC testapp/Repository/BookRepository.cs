@@ -4,15 +4,16 @@ using System.Linq;
 namespace ASP.NET_MVC_testapp.Repository
 {
     public class BookRepository : BookInterface
-    
     {
-        private readonly MyDbContext myDbContext;
+        private readonly MyDbContext _myDbContext;
 
         public BookRepository(MyDbContext myDbContext)
         {
-            this.myDbContext = myDbContext;
+            _myDbContext = myDbContext;
         }
-
-        public ICollection<Book> Books => myDbContext.Books.ToList();
+        public List<Book> SearchBooks(string searchTerm)
+        {
+            return _myDbContext.Books.Where(b => b.Title.Contains(searchTerm) || b.AuthorName.Contains(searchTerm)).ToList();
+        }
     }
 }

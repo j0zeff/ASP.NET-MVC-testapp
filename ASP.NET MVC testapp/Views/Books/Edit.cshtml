@@ -67,10 +67,16 @@
     <script>
         $(function () {
             $('#saveButton').click(function () {
+                var form = document.querySelector('form');
+                var formData = new FormData(form);
+
                 $.ajax({
                     url: '@Url.Action("Edit", "Books")',
                     type: 'POST',
-                    data: $('form').serialize(),
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    cache: false,
                     success: function (result) {
                         location.reload();
                     }
@@ -78,4 +84,5 @@
             });
         });
     </script>
+
 }

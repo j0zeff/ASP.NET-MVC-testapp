@@ -22,33 +22,35 @@ namespace ASP.NET_MVC_testapp.Controllers
            _context = context;
         }
 
-        // GET: Books
-        [HttpGet]
-        public IActionResult IndexLib(string inputDefault)
+        public IActionResult SearchBooks(string searchTerm)
         {
-            var books = new BookRepository(_context);
-            var filter = new BookFilters();
-            var book_query = _context.Books.AsQueryable();
-            filter.Author_name = inputDefault;
-            if(!string.IsNullOrEmpty(filter.Author_name))
+            if (searchTerm.IsNullOrEmpty())
             {
-                book_query = book_query.Where(b => b.AuthorName == filter.Author_name);
+                var FullList = _context.Books.ToList();
+                return PartialView("_BookList", FullList);
             }
-            if (!string.IsNullOrEmpty(filter.Author_surname))
+            var searchResults = _context.Books
+            .Where(b => b.Title.Contains(searchTerm) || b.AuthorName.Contains(searchTerm) || b.AuthorSurname.Contains(searchTerm) || b.ReleaseDate.ToString().Contains(searchTerm))
+            .ToList();
+
+            ViewBag.IsAjaxRequest = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+            if (ViewBag.IsAjaxRequest)
             {
-                book_query = book_query.Where(b => b.AuthorSurname == filter.Author_surname);
+                // AJAX request, return partial view
+                return PartialView("_BookList", searchResults);
             }
-            if (!string.IsNullOrEmpty(filter.Genre))
+            else
             {
-                book_query = book_query.Where(b => b.Genre == filter.Genre);
+                return View("IndexLib");
             }
-            if (!string.IsNullOrEmpty(filter.ReleaseDate))
-            {
-                book_query = book_query.Where(b => b.ReleaseDate.ToString() == filter.ReleaseDate);
-            }
-            var bookslist = book_query.ToList();
-            var result = new MainViewModel(filter, books, bookslist);
-            return View(result);
+        }
+
+        // GET: Books
+        public IActionResult IndexLib()
+        {
+            var books = _context.Books.ToList();
+            return View(books);
         }
         
         // GET: Books/Details/5
@@ -93,6 +95,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books/Edit/5
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Books == null)
@@ -113,9 +116,10 @@ namespace ASP.NET_MVC_testapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,AuthorName,AuthorSurname,Pages,Genre,BookDescription,ReleaseDate")] Book book)
+        public async Task<IActionResult> Edit(int id, string title, string authorName, string authorSurname, int pages, string genre, string bookDescription, int releaseDate)
         {
-            if (id != book.BookId)
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
                 return NotFound();
             }
@@ -124,6 +128,13 @@ namespace ASP.NET_MVC_testapp.Controllers
             {
                 try
                 {
+                    book.Title = title;
+                    book.AuthorName = authorName;
+                    book.AuthorSurname = authorSurname;
+                    book.Pages = pages;
+                    book.Genre = genre;
+                    book.BookDescription = bookDescription;
+                    book.ReleaseDate = releaseDate;
                     _context.Update(book);
                     await _context.SaveChangesAsync();
                 }
@@ -142,6 +153,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             }
             return View(book);
         }
+
 
         // GET: Books/Delete/5
         public async Task<IActionResult> Delete(int? id)

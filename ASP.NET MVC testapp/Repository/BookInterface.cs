@@ -4,6 +4,6 @@ namespace ASP.NET_MVC_testapp
 {
     public interface BookInterface
     {
-        ICollection<Book> Books { get; }
+        List<Book> SearchBooks(string searchTerm);
     }
 }

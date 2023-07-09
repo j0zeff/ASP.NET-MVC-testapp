@@ -1,131 +1,56 @@
-﻿@model ASP.NET_MVC_testapp.Models.MainViewModel
+﻿@model List<Book>
 
 
 @{
     ViewData["title"] = "IndexLib";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h1>LIBRARY</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form method="get" asp-action="IndexLib" asp-controller="Books">
-    <div class="form-group">
-        <label class="col-form-label mt-4" for="inputDefault">Default input</label>
-        <input type="text" class="form-control" placeholder="Default input" name="inputDefault">
-    </div>
-    <button type="submit">Submit</button>
+<form>
+    <input type="text" id="searchInput" placeholder="Enter book title or author">
 </form>
-<div id="datatable">
+
+<div id="searchResultsContainer">
     <table class="table">
         <thead>
             <tr class="table-dark">
-                <th>
-                    Title
-                </th>
-                <th>
-                    Author
-                </th>
-                @*            <th>
-                AuthorSurname
-                </th>*@
-                @*            <th>
-                Pages
-                </th>
-                <th>
-                Genre
-                </th>
-                <th>
-                BookDescription
-                </th>*@
-                <th>
-                    ReleaseDate
-                </th>
-                <th></th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
             </tr>
         </thead>
         <tbody>
-            @if (Model.Booklist.Count != 0)
+            @foreach (var book in Model)
             {
-                foreach (var item in Model.Booklist)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        @*            <td>
-                @Html.DisplayFor(modelItem => item.AuthorName)
-                </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AuthorName) @Html.DisplayFor(modelItem => item.AuthorSurname)
-                        </td>
-                        @*            <td>
-                @Html.DisplayFor(modelItem => item.Pages)
-                </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-                </td>*@
-                        @*            <td>
-                @Html.DisplayFor(modelItem => item.BookDescription)
-                </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ReleaseDate)
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.BookId">Details</a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <text>
-                                    <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
-                                </text>
-                            }
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                @foreach (var item in Model.Bookrepository.Books)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        @*            <td>
-                @Html.DisplayFor(modelItem => item.AuthorName)
-                </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AuthorName) @Html.DisplayFor(modelItem => item.AuthorSurname)
-                        </td>
-                        @*            <td>
-                @Html.DisplayFor(modelItem => item.Pages)
-                </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-                </td>*@
-                        @*            <td>
-                @Html.DisplayFor(modelItem => item.BookDescription)
-                </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ReleaseDate)
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.BookId">Details</a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <text>
-                                    <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a>
-                                </text>
-                            }
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.AuthorName @book.AuthorSurname</td>
+                    <td>@book.ReleaseDate</td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
+<!-- Include jQuery and the JavaScript code for AJAX search -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#searchInput').on('input', function () {
+            var searchTerm = $(this).val();
 
+            $.ajax({
+                url: '/Books/SearchBooks',
+                type: 'GET',
+                cache: false,
+                data: { searchTerm: searchTerm },
+                success: function (result) {
+                    $('#searchResultsContainer').html(result);
+                }
+            });
+        });
+    });
+</script>
