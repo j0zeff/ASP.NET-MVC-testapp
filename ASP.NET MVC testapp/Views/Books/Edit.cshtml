@@ -4,14 +4,16 @@
     ViewData["title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
 <h1>Edit</h1>
 
 <h4>Book</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" asp-controller="Books">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BookId" />
             <div class="form-group">
@@ -49,8 +51,11 @@
                 <input asp-for="ReleaseDate" class="form-control" />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
+            @*<form asp-action="IndexLib" method="post">
+                
+            </form>*@
             <div class="form-group">
-                <button type="button" id="saveButton" class="btn btn-primary">Save</button>
+                <button type="submit" id="saveButton" class="btn btn-primary">Save</button>
             </div>
         </form>
     </div>
@@ -64,25 +69,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script>
-        $(function () {
-            $('#saveButton').click(function () {
-                var form = document.querySelector('form');
-                var formData = new FormData(form);
-
-                $.ajax({
-                    url: '@Url.Action("Edit", "Books")',
-                    type: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    cache: false,
-                    success: function (result) {
-                        location.reload();
-                    }
-                });
-            });
-        });
-    </script>
-
 }

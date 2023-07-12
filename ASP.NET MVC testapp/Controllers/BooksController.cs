@@ -11,14 +11,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
-    
+
     public class BooksController : Controller
     {
         private readonly MyDbContext _context;
 
         public BooksController(MyDbContext context)
         {
-           _context = context;
+            _context = context;
         }
 
         public IActionResult SearchBooks(string searchTerm)
@@ -51,7 +51,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             var books = _context.Books.ToList();
             return View(books);
         }
-        
+
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -71,7 +71,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books/Create
-        
+
         public IActionResult Create()
         {
             return View();
@@ -94,7 +94,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books/Edit/5
-        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Books == null)
@@ -115,25 +115,16 @@ namespace ASP.NET_MVC_testapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, string title, string authorName, string authorSurname, int pages, string genre, string bookDescription, int releaseDate)
+        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,AuthorName,AuthorSurname,Pages,Genre,BookDescription,ReleaseDate")] Book book)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
+            if (id != book.BookId)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    book.Title = title;
-                    book.AuthorName = authorName;
-                    book.AuthorSurname = authorSurname;
-                    book.Pages = pages;
-                    book.Genre = genre;
-                    book.BookDescription = bookDescription;
-                    book.ReleaseDate = releaseDate;
                     _context.Update(book);
                     await _context.SaveChangesAsync();
                 }
@@ -148,11 +139,10 @@ namespace ASP.NET_MVC_testapp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("IndexLib");
             }
             return View(book);
         }
-
 
         // GET: Books/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -162,7 +152,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books 
+            var book = await _context.Books
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
