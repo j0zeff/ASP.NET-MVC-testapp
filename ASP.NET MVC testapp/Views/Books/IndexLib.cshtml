@@ -33,14 +33,13 @@
                     <td>@book.ReleaseDate</td>
                     <td>
                         <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
-                        @*@if (User.IsInRole("Admin"))
-                    {
-                    <text>
-
-                    </text>
-                    }*@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <text>
+                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
+                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
+                            </text>
+                        }
                     </td>
                 </tr>
             }
