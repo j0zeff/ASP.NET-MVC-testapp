@@ -1,0 +1,66 @@
+﻿@model PaginatedList<AplicationUser>
+@{
+    ViewData["title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>USERS</h1>
+
+<form>
+    <input type="text" id="searchInput" placeholder="Enter book title or author">
+</form>
+
+<div id="searchResultsContainer">
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th>Id</th>
+                <th></th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id<td>
+                    <td>@user.Email</td>
+                    <td>@user.Firstname</td>
+                    <td>@user.Lastname</td>
+                    <td>
+                        <a class="btn btn-primary mx-2" asp-controller="Home" asp-action="Details" asp-route-id="@user.Id">Details</a>                      
+                        <a class="btn btn-primary mx-2" asp-controller="Home" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                        <a class="btn btn-primary mx-2" asp-controller="Home" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="Users" asp-route-pageNumber="@(Model.PageIndex-1)" class="btn btn-default @prevDisabled">Previous</a>
+    <a asp-action="Users" asp-route-pageNumber="@(Model.PageIndex+1)" class="btn btn-default @nextDisabled">Next</a>
+</div>
+<!-- Include jQuery and the JavaScript code for AJAX search -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#searchInput').on('input', function () {
+            var searchTerm = $(this).val();
+
+            $.ajax({
+                url: '/Home/SearchUsers',
+                type: 'GET',
+                cache: false,
+                data: { searchTerm: searchTerm },
+                success: function (result) {
+                    $('#searchResultsContainer').html(result);
+                }
+            });
+        });
+    });
+</script>

@@ -1,4 +1,4 @@
-﻿@model List<Book>
+﻿@model PaginatedList<Book>
 
 
 @{
@@ -8,7 +8,13 @@
 <h1>LIBRARY</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <text>
+            <a asp-action="Create">Create New</a>
+        </text>
+    }
+    
 </p>
 <form>
     <input type="text" id="searchInput" placeholder="Enter book title or author">
@@ -45,6 +51,12 @@
             }
         </tbody>
     </table>
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="IndexLib" asp-route-pageNumber="@(Model.PageIndex-1)" class="btn btn-default @prevDisabled">Previous</a>
+    <a asp-action="IndexLib" asp-route-pageNumber="@(Model.PageIndex+1)" class="btn btn-default @nextDisabled">Next</a>
 </div>
 <!-- Include jQuery and the JavaScript code for AJAX search -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

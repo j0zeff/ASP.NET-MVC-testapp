@@ -56,6 +56,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.BookId">Edit</a> |
+    @if (User.IsInRole("Admin"))
+    {
+        <text>
+            <a asp-action="Edit" asp-route-id="@Model?.BookId">Edit</a> |
+        </text>
+    }
     <a asp-area="" asp-controller="Books" asp-action="IndexLib">Back to list</a>
 </div>

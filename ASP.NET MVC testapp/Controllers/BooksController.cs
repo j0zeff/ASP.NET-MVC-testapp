@@ -24,7 +24,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         public IActionResult SearchBooks(string searchTerm)
         {
             if (searchTerm.IsNullOrEmpty())
-            {
+            {       
                 var FullList = _context.Books.ToList();
                 return PartialView("_BookList", FullList);
             }
@@ -46,10 +46,10 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books
-        public IActionResult IndexLib()
+        public IActionResult IndexLib(int? pageNumber)
         {
-            var books = _context.Books.ToList();
-            return View(books);
+            int pageSize = 5;
+            return View(PaginatedList<Book>.Create(_context.Books.ToList(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Books/Details/5

@@ -19,6 +19,13 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
     {
         optionsBuilder.UseSqlServer(_configuration.GetConnectionString("MyDbContext"));
     }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // Customize your custom user entity configuration if needed
+    }
     public DbSet<Book> Books { get; set; }
     public DbSet<AplicationUser> AplicationUsers  { get; set; }
 

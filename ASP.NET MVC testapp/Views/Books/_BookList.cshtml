@@ -3,7 +3,7 @@
 *@
 @model List<Book>
 
-<h4>Search Results:</h4>
+<h4>Popular Results:</h4>
 
 @if (Model.Count > 0)
 {
@@ -17,28 +17,36 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var book in Model)
-            {
-                <tr>
-                    <td>@book.Title</td>
-                    <td>@book.AuthorName @book.AuthorSurname</td>
-                    <td>@book.ReleaseDate</td>
-                    <td>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <text>
-                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
-                            </text>
-                        }
-                    </td>
-                </tr>
+            @{
+                int i = 0;
+                foreach (var book in Model)
+                {
+                    if (i < 5)
+                    {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.AuthorName @book.AuthorSurname</td>
+                            <td>@book.ReleaseDate</td>
+                            <td>
+                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <text>
+                                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
+                                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
+                                    </text>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    else break;
+                    i++;
+                }
             }
+
         </tbody>
     </table>
+
 }
 else
 {
