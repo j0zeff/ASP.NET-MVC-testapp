@@ -29,7 +29,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             if (searchTerm.IsNullOrEmpty())
             {
                 var FullList = _context.AplicationUsers.ToList();
-                return PartialView("_BookList", FullList);
+                return PartialView("_UserList", FullList);
             }
             var searchResults = _context.AplicationUsers
             .Where(b => b.Id.Contains(searchTerm) || b.Email.Contains(searchTerm) || b.Firstname.Contains(searchTerm) || b.Lastname.Contains(searchTerm))
@@ -56,7 +56,10 @@ namespace ASP.NET_MVC_testapp.Controllers
         public IActionResult Users(int? pageNumber)
         {
             int pageSize = 5;
-            var userList = PaginatedList<AplicationUser>.Create(_context.AplicationUsers.ToList(), pageNumber ?? 1, pageSize);
+            var users = _context.AplicationUsers.ToList();
+            
+
+            var userList = PaginatedList<ApplicationUser>.Create(users, pageNumber ?? 1, pageSize);
             return View(userList);
         }
 
@@ -97,12 +100,13 @@ namespace ASP.NET_MVC_testapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id, Email, Firstname, Lastname, EmailConfirmed")] AplicationUser user)
+        public async Task<IActionResult> Edit(string id, [Bind("Id, Email, Firstname, Lastname, EmailConfirmed")] ApplicationUser user)
         {
             if (id != user.Id)
             {
                 return NotFound();
             }
+           
             if (ModelState.IsValid)
             {
                 try

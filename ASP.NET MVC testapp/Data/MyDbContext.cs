@@ -27,6 +27,7 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
         // Customize your custom user entity configuration if needed
     }
     public DbSet<Book> Books { get; set; }
-    public DbSet<AplicationUser> AplicationUsers  { get; set; }
+    public DbSet<ApplicationUser> AplicationUsers  { get; set; }
+    public DbSet<FavoriteBook> UserFavoriteBooks { get; set; }
 
 }

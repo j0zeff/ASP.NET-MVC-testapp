@@ -7,12 +7,12 @@ namespace ASP.NET_MVC_testapp.Controllers
     {
         public IActionResult SignUp()
         {
-            var users = new AplicationUser();
+            var users = new ApplicationUser();
             return View(users);
         }
         public IActionResult LogIn()
         {
-            var users = new AplicationUser();
+            var users = new ApplicationUser();
             return View(users);
         }
     }

@@ -14,7 +14,7 @@
             <a asp-action="Create">Create New</a>
         </text>
     }
-    
+
 </p>
 <form>
     <input type="text" id="searchInput" placeholder="Enter book title or author">
@@ -39,6 +39,10 @@
                     <td>@book.ReleaseDate</td>
                     <td>
                         <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                        {
+                            <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="AddToFavorites" asp-route-bookId="@book.BookId">Like</a>
+                        }
                         @if (User.IsInRole("Admin"))
                         {
                             <text>

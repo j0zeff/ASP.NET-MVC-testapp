@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -21,6 +22,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RequiredAttribute = Microsoft.Build.Framework.RequiredAttribute;
 
@@ -35,6 +37,7 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly MyDbContext _dbContext;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -42,7 +45,8 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            MyDbContext dbContext)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -51,6 +55,7 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
             public string? Role { get; set; }
 
             [ValidateNever]
-            public IEnumerable<SelectListItem> RoleList {get; set;}
+            public IEnumerable<SelectListItem> RoleList { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -143,18 +148,32 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.Firstname = Input.Firstname;
                 user.Lastname = Input.Lastname;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
                     await _userManager.AddToRoleAsync(user, Input.Role);
                     var userId = await _userManager.GetUserIdAsync(user);
+                    var roleId = _dbContext.UserRoles.FirstOrDefault(r => r.UserId == user.Id)?.RoleId;
+                    if (roleId != null)
+                    {
+                        user.RoleId = roleId;
+                        _dbContext.SaveChanges();
+                    }
+                    var roleName = _dbContext.Roles.FirstOrDefault(r => r.Id == user.RoleId)?.Name;
+                    if (roleId != null)
+                    {
+                        user.Role = roleName;
+                        _dbContext.SaveChanges();
+                    }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -186,11 +205,11 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private AplicationUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<AplicationUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {

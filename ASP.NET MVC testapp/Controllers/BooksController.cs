@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ASP.NET_MVC_testapp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
@@ -15,13 +16,42 @@ namespace ASP.NET_MVC_testapp.Controllers
     public class BooksController : Controller
     {
         private readonly MyDbContext _context;
+        private readonly ILogger _logger;   
 
-        public BooksController(MyDbContext context)
+        public BooksController(MyDbContext context, ILogger<BooksController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        public IActionResult SearchBooks(string searchTerm)
+        public IActionResult AddToFavorites(int bookId)
+        {
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (bookId != null && currentUserId != null)
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                        // Enable IDENTITY_INSERT for the UserFavoriteBooks table
+                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT UserFavoriteBooks ON;");
+
+                        var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId };
+                        _context.UserFavoriteBooks.Add(favoriteBook);
+                        _context.SaveChanges();
+
+                        // Disable IDENTITY_INSERT after the insert operation
+                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT UserFavoriteBooks OFF;");
+
+                        transaction.Commit();
+
+                    return Ok();
+                }
+            }
+
+            return BadRequest("Invalid bookId or currentUserId.");
+        }
+    
+
+    public IActionResult SearchBooks(string searchTerm)
         {
             if (searchTerm.IsNullOrEmpty())
             {       

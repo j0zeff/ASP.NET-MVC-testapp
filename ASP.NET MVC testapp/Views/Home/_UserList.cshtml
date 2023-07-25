@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model List<AplicationUser>
+@model List<ApplicationUser>
 
 <h4>Popular Results:</h4>
 
@@ -15,6 +15,7 @@
                 <th>Email</th>
                 <th>Name</th>
                 <th>Surname</th>
+                <th>Role</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                     <td>@user.Email</td>
                     <td>@user.Firstname</td>
                     <td>@user.Lastname</td>
+                    <td>@user.Role</td>
                     <td>
                         <a class="btn btn-primary mx-2" asp-controller="Home" asp-action="Details" asp-route-id="@user.Id">Details</a>
                         <a class="btn btn-primary mx-2" asp-controller="Home" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
