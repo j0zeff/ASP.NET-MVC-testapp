@@ -43,7 +43,7 @@ namespace ASP.NET_MVC_testapp.Controllers
 
                         transaction.Commit();
 
-                    return Ok();
+                    return RedirectToAction(nameof(IndexLib));
                 }
             }
 
