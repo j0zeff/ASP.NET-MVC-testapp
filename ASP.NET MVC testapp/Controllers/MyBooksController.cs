@@ -2,7 +2,7 @@
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
-    public class MyBooksController1 : Controller
+    public class MyBooksController : Controller
     {
         public IActionResult Index()
         {
