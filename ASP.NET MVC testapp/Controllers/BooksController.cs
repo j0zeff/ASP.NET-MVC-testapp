@@ -49,7 +49,13 @@ namespace ASP.NET_MVC_testapp.Controllers
 
             return BadRequest("Invalid bookId or currentUserId.");
         }
-    
+
+        public IActionResult RemoveToFavorites(int bookId)
+        {
+
+
+            return RedirectToAction(nameof(IndexLib));
+        }
 
     public IActionResult SearchBooks(string searchTerm)
         {
