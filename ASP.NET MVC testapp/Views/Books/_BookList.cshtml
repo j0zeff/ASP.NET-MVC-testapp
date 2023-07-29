@@ -31,7 +31,16 @@
                                 <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
                                 @if (User.IsInRole("Admin") || User.IsInRole("User"))
                                 {
-                                    <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="AddToFavorites" asp-route-bookId="@book.BookId">Like</a>
+                                    <form action="/MyBooks/OnPostAddToMyBook" method="post">
+                                        <input type="hidden" name="BookId" value="@book.BookId" />
+                                        <select name="SelectedOption">
+                                            <option value="favorites">To favorite</option>
+                                            <option value="alreadyRead">To Already Read</option>
+                                            <option value="currentlyReading">To Current Reading</option>
+                                            <option value="willRead">To Future Read</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
+                                    </form>
                                 }
                                 @if (User.IsInRole("Admin"))
                                 {

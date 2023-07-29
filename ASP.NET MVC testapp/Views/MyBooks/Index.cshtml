@@ -1,0 +1,204 @@
+﻿@{
+    ViewData["Title"] = "Library";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IndexViewModel
+<h1 class="text-md-center pt-4 pb-3">MY BOOKS</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 1 })">
+                <h3>Books I've Read</h3>
+                <div class="table">
+                    @{
+                        int i = 0;
+                        if (Model.alreadyRead.Count > 0 && i < 5)
+                        {
+                            <div class="row">
+                                <h5 class="col">Title</h5>
+                                <h5 class="col">Author</h5>
+                                <h5 class="col">Year</h5>
+                            </div>
+                            foreach (var book in Model.alreadyRead)
+                            {
+                                <div class="row">
+                                    <p class="col">@book.Title</p>
+                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
+                                    <p class="col">@book.ReleaseDate</p>
+                                </div>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                            </div>
+                            for (int j = 0; j < 5; j++)
+                            {
+                                <div class="row">
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="go-corner" href="@Url.Action("ShowList", "MyBooks", new { num = 1 })">
+                    <a class="go-arrow" asp-area="" asp-controller="MyBooks" asp-action="ShowList" asp-route-list="1">
+                        →
+                    </a>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 2 })">
+                <h3>Books I`m currently reading</h3>
+                <div class="table">
+                    @{
+                        int k = 0;
+                        if (Model.currentlyReading.Count > 0 && k < 5)
+                        {
+                            <div class="row">
+                                <h5 class="col">Title</h5>
+                                <h5 class="col">Author</h5>
+                                <h5 class="col">Year</h5>
+                            </div>
+                            foreach (var book in Model.currentlyReading)
+                            {
+                                <div class="row">
+                                    <p class="col">@book.Title</p>
+                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
+                                    <p class="col">@book.ReleaseDate</p>
+                                </div>
+                                k++;
+                            }
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                            </div>
+                            for (int j = 0; j < 5; j++)
+                            {
+                                <div class="row">
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="go-corner" href="@Url.Action("ShowList", "MyBooks", new { num = 2 })">
+                    <a class="go-arrow" asp-area="" asp-controller="MyBooks" asp-action="ShowList" asp-route-list="2">
+                        →
+                    </a>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 3 })">
+                <h3>Books I plan to read</h3>
+                <div class="table">
+                    @{
+                        int l = 0;
+                        if (Model.willRead.Count > 0 && l < 5)
+                                    {
+                            <div class="row">
+                                <h5 class="col">Title</h5>
+                                <h5 class="col">Author</h5>
+                                <h5 class="col">Year</h5>
+                            </div>
+                            foreach (var book in Model.willRead)
+                            {
+                                <div class="row">
+                                    <p class="col">@book.Title</p>
+                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
+                                    <p class="col">@book.ReleaseDate</p>
+                                </div>
+                                l++;
+                            }
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                            </div>
+                            for (int j = 0; j < 5; j++)
+                            {
+                                <div class="row">
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="go-corner" href="@Url.Action("ShowList", "MyBooks", new { num = 3 })">
+                    <a class="go-arrow" asp-area="" asp-controller="MyBooks" asp-action="ShowList" asp-route-list="3">
+                        →
+                    </a>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 4 })">
+                <h3>Favorite books</h3>
+                <div class="table">
+                    @{
+                        int n = 0;
+                        if (Model.favoriteBooks.Count > 0 && n < 5)
+                        {
+                            <div class="row">
+                                <h5 class="col">Title</h5>
+                                <h5 class="col">Author</h5>
+                                <h5 class="col">Year</h5>
+                            </div>
+                            foreach (var book in Model.favoriteBooks)
+                            {
+                                <div class="row">
+                                    <p class="col">@book.Title</p>
+                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
+                                    <p class="col">@book.ReleaseDate</p>
+                                </div>
+                                n++;
+                            }
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <h5 class="col">e</h5>
+                                <h5 class="col"></h5>
+                                <h5 class="col"></h5>
+                            </div>
+                            for (int j = 0; j < 5; j++)
+                            {
+                                <div class="row">
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                    <p class="col"></p>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="go-corner" href="@Url.Action("ShowList", "MyBooks", new { num = 4 })">
+                    <div class="go-arrow">
+                        →
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
