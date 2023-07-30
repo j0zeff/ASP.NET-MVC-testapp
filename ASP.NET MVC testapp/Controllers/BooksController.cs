@@ -24,10 +24,6 @@ namespace ASP.NET_MVC_testapp.Controllers
             _logger = logger;
         }
 
-<<<<<<< HEAD
-       
-    
-=======
         public IActionResult AddToFavorites(int bookId)
         {
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -60,7 +56,6 @@ namespace ASP.NET_MVC_testapp.Controllers
 
             return RedirectToAction(nameof(IndexLib));
         }
->>>>>>> c293d22bd1b9b8b09d7497a33b0e9fab41786a30
 
     public IActionResult SearchBooks(string searchTerm)
         {
