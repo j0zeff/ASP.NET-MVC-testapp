@@ -1,0 +1,66 @@
+﻿@model ListViewModel
+
+
+@{
+    ViewData["title"] = "IndexLib";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>LIBRARY</h1>
+
+<div id="searchResultsContainer">
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.booklist)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.AuthorName @book.AuthorSurname</td>
+                    <td>@book.ReleaseDate</td>
+                    <td>
+                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
+                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                        {
+                            <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="@true">Like</a>
+                            if (Model.name == "favorite")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="favorite" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                            else if (Model.name == "current")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="current" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                            else if (Model.name == "already")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="already" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                            else if (Model.name == "will")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <text>
+                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
+                            </text>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        var prevDisabled = !Model.booklist.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.booklist.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.booklist.PageIndex-1)" asp-route-name="@Model.name" class="btn btn-default @prevDisabled">Previous</a>
+    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.booklist.PageIndex+1)" asp-route-name="@Model.name" class=" btn btn-default @nextDisabled">Next</a>
+</div>

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Event>
+@{
     ViewData["Title"] = "Library";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,6 +9,7 @@
         <h1>Welcome to the Library</h1>
         <p>Explore our vast collection of books</p>
         <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="IndexLib">Browse Books</a>
+        <a class="btn btn-primary btn-lg" asp-controller="Event" asp-action="CreateEvent">Create Event</a>
     </div>
 </div>
 
@@ -16,27 +18,7 @@
         <div class="col-md-12">
             <h2>Upcoming Events</h2>
             <div class="card-deck">
-                <div class="card mb-4">
-                    @*<img class="card-img-top" src="/images/event1.jpg" alt="Event 1">*@
-                    <div class="card-body">
-                        <h5 class="card-title">Book Discussion: "The Great Gatsby"</h5>
-                        <p class="card-text">Join us for a lively book discussion on F. Scott Fitzgerald's classic novel "The Great Gatsby." Date: [Date], Time: [Time].</p>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    @*<img class="card-img-top" src="/images/event2.jpg" alt="Event 2">*@
-                    <div class="card-body">
-                        <h5 class="card-title">Children's Storytime</h5>
-                        <p class="card-text">Bring your little ones for an enchanting storytime session filled with exciting tales and interactive activities. Date: [Date], Time: [Time].</p>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    @*<img class="card-img-top" src="/images/event3.jpg" alt="Event 3">*@
-                    <div class="card-body">
-                        <h5 class="card-title">Author Visit: [Author Name]</h5>
-                        <p class="card-text">Meet acclaimed author [Author Name] as they discuss their latest book and share insights into their writing process. Date: [Date], Time: [Time].</p>
-                    </div>
-                </div>
+                @Html.Partial("ShowEventList", Model)
             </div>
         </div>
     </div>
