@@ -29,5 +29,7 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Book> Books { get; set; }
     public DbSet<ApplicationUser> AplicationUsers  { get; set; }
     public DbSet<FavoriteBook> UserFavoriteBooks { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<EventVisitor> eventVisitors { get; set; }
 
 }

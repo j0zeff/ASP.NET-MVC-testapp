@@ -50,7 +50,8 @@ namespace ASP.NET_MVC_testapp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            List<Event> _Eventlist = _context.Events.ToList();
+            return View(_Eventlist);
         }
 
         public IActionResult Users(int? pageNumber)
@@ -177,8 +178,6 @@ namespace ASP.NET_MVC_testapp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
         private bool UserExists(string id)
         {
             return (_context.AplicationUsers?.Any(e => e.Id == id)).GetValueOrDefault();

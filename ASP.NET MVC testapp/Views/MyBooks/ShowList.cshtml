@@ -1,4 +1,4 @@
-﻿@model PaginatedList<Book>
+﻿@model ListViewModel
 
 
 @{
@@ -6,10 +6,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h1>LIBRARY</h1>
-
-<form>
-    <input type="text" id="searchInput" placeholder="Enter book title or author">
-</form>
 
 <div id="searchResultsContainer">
     <table class="table">
@@ -22,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var book in Model)
+            @foreach (var book in Model.booklist)
             {
                 <tr>
                     <td>@book.Title</td>
@@ -33,12 +29,27 @@
                         @if (User.IsInRole("Admin") || User.IsInRole("User"))
                         {
                             <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="@true">Like</a>
+                            if (Model.name == "favorite")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="favorite" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                            else if (Model.name == "current")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="current" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                            else if (Model.name == "already")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="already" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
+                            else if (Model.name == "will")
+                            {
+                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                            }
                         }
                         @if (User.IsInRole("Admin"))
                         {
                             <text>
                                 <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
                             </text>
                         }
                     </td>
@@ -47,28 +58,9 @@
         </tbody>
     </table>
     @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        var prevDisabled = !Model.booklist.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.booklist.HasNextPage ? "disabled" : "";
     }
-    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.PageIndex-1)"  class="btn btn-default @prevDisabled">Previous</a>
-    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.PageIndex+1)"  class=" btn btn-default @nextDisabled">Next</a>
+    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.booklist.PageIndex-1)" asp-route-name="@Model.name" class="btn btn-default @prevDisabled">Previous</a>
+    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.booklist.PageIndex+1)" asp-route-name="@Model.name" class=" btn btn-default @nextDisabled">Next</a>
 </div>
-<!-- Include jQuery and the JavaScript code for AJAX search -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#searchInput').on('input', function () {
-            var searchTerm = $(this).val();
-
-            $.ajax({
-                url: '/MyBooks/SearchBooks',
-                type: 'GET',
-                cache: false,
-                data: { searchTerm: searchTerm },
-                success: function (result) {
-                    $('#searchResultsContainer').html(result);
-                }
-            });
-        });
-    });
-</script>

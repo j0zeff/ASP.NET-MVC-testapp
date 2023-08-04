@@ -217,3 +217,23 @@ body {
     .card4:hover .go-arrow {
         opacity: 1;
     }
+.card-link {
+    text-decoration: none; /* Remove underline */
+}
+
+.event-card {
+    transition: background-color 0.3s;
+    background-color: #fff; /* Set the default background color */
+    color: #333; /* Set the default text color */
+}
+
+    .event-card:hover {
+        background-color: #343a40;
+        color: white; /* Text color becomes white on hover */
+    }
+
+    /* Style the card text to stay black by default */
+    .event-card:hover .card-title,
+    .event-card:hover .card-text {
+        color: white;
+    }

@@ -43,6 +43,7 @@
                         {
                             <form action="/MyBooks/OnPostAddToMyBook" method="post">
                                 <input type="hidden" name="BookId" value="@book.BookId" />
+                                <input type="hidden" name="pageNumber" value="@Model.PageIndex" />
                                 <select name="SelectedOption">
                                     <option value="favorites">To favorite</option>
                                     <option value="alreadyRead">To Already Read</option>

@@ -4470,7 +4470,7 @@ textarea.form-control-lg {
 }
 
 .card-link + .card-link {
-  margin-left: var(--bs-card-spacer-x);
+    margin-left: var(--bs-card-spacer-x);
 }
 
 .card-header {
@@ -12459,4 +12459,8 @@ pre {
 
 .img-thumbnail {
   border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+}
+
+.card-link:hover .card {
+    background-color: #555;
 }

@@ -1,0 +1,44 @@
+﻿@model Event 
+@{
+    ViewData["title"] = "IndexLib";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Details</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                @if (Model.image_data != null && Model.image_data.Length > 0)
+                {
+                    var base64Image = Convert.ToBase64String(Model.image_data);
+                    var imageSrc = $"data:image/jpeg;base64,{base64Image}";
+                    <img src="@imageSrc" alt="Image" class="img-fluid">
+                }
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Event" asp-action="AddToEventVisitors" asp-route-EventId="@Model.Id">Visit</a>
+                    </div>
+            </div>
+            <div class="col-md-8">
+                <h1>@Model.Title</h1>
+                <p>Date and Time: @Model.DateAndTime.ToString("yyyy-MM-dd HH:mm")</p>
+                <hr>
+                <h4>Description:</h4>
+                <p>@Model.LongDescription</p>
+                <hr>
+                <h4>Location:</h4>
+                <p>City: <strong>@Model.City</strong></p>
+                <p>Address: <strong>@Model.Address</strong></p>
+                <hr>
+                <h4>Organizer:</h4>
+                <p>Organizer Name: <strong>@Model.Organizer_name</strong></p>
+                <p>Contact Email: <strong>@Model.Organizer_email</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
