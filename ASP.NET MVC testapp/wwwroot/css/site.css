@@ -223,12 +223,12 @@ body {
 
 .event-card {
     transition: background-color 0.3s;
-    background-color: #fff; /* Set the default background color */
-    color: #333; /* Set the default text color */
+    background-color: #333; /* Set the default background color */
+    color: #fff; /* Set the default text color */
 }
 
     .event-card:hover {
-        background-color: #343a40;
+        background-color: #333;
         color: white; /* Text color becomes white on hover */
     }
 

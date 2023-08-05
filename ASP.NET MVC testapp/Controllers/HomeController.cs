@@ -101,19 +101,20 @@ namespace ASP.NET_MVC_testapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id, Email, Firstname, Lastname, EmailConfirmed")] ApplicationUser user)
+        public async Task<IActionResult> Edit(string id, ApplicationUser user)
         {
             if (id != user.Id)
             {
                 return NotFound();
             }
-           
+            var _user = _context.AplicationUsers.Find(id);
+            _user = user;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    //_context.Update(user);
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -128,7 +129,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                 }
                 return RedirectToAction("Users");
             }
-            return View(user);
+            return View(_user);
         }
 
         public async Task<IActionResult> Delete(string? id)

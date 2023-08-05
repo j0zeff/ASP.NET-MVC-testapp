@@ -1,0 +1,79 @@
+﻿@model EventViewModel
+
+@{
+    ViewData["title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<h1>Edit</h1>
+
+<h4>Event</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditEvent" asp-controller="Event" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label">Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortDescription" class="control-label">Short Description</label>
+                <input asp-for="ShortDescription" class="form-control" />
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LongDescription" class="control-label">Long Description</label>
+                <input asp-for="LongDescription" class="form-control" />
+                <span asp-validation-for="LongDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAndTime" class="control-label">Date and Time</label>
+                <input asp-for="DateAndTime" class="form-control" />
+                <span asp-validation-for="DateAndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label">City</label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label">Address</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>           
+            <div class="form-group">
+                <label asp-for="Organizer_name" class="control-label">Organizer name</label>
+                <input asp-for="Organizer_name" class="form-control" />
+                <span asp-validation-for="Organizer_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Organizer_email" class="control-label">Organizer email</label>
+                <input asp-for="Organizer_email" class="form-control" />
+                <span asp-validation-for="Organizer_email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="image_data" class="control-label">Image</label>
+                <input type="file" name="image_data" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" id="saveButton" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <<a asp-area="" asp-controller="Home" asp-action="Index">Back to list</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
