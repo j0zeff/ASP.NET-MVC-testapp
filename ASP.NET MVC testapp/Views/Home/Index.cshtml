@@ -9,7 +9,10 @@
         <h1>Welcome to the Library</h1>
         <p>Explore our vast collection of books</p>
         <a class="btn btn-primary btn-lg" asp-controller="Books" asp-action="IndexLib">Browse Books</a>
-        <a class="btn btn-primary btn-lg" asp-controller="Event" asp-action="CreateEvent">Create Event</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary btn-lg" asp-controller="Event" asp-action="CreateEvent">Create Event</a>
+        }
     </div>
 </div>
 

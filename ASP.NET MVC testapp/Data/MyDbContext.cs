@@ -31,5 +31,4 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
     public DbSet<FavoriteBook> UserFavoriteBooks { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<EventVisitor> eventVisitors { get; set; }
-
 }
