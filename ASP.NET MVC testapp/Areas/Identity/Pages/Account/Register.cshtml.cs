@@ -147,8 +147,7 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
-
+                user.Role = "User";
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -160,7 +159,7 @@ namespace ASP.NET_MVC_testapp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    await _userManager.AddToRoleAsync(user, Input.Role);
+                    await _userManager.AddToRoleAsync(user, "User");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var roleId = _dbContext.UserRoles.FirstOrDefault(r => r.UserId == user.Id)?.RoleId;
                     if (roleId != null)

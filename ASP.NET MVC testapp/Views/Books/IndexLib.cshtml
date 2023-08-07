@@ -38,7 +38,14 @@
                     <td>@book.AuthorName @book.AuthorSurname</td>
                     <td>@book.ReleaseDate</td>
                     <td>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
+                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a> 
+                        @if (User.IsInRole("Admin"))
+                        {
+
+                            <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
+                            <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
+
+                        }
                         @if (User.IsInRole("Admin") || User.IsInRole("User"))
                         {
                             <form action="/MyBooks/OnPostAddToMyBook" method="post">
@@ -56,16 +63,9 @@
                                         <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
                                     }
                                 }
-                                
                             </form>
                         }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <text>
-                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
-                            </text>
-                        }
+
                     </td>
                 </tr>
             }
