@@ -25,6 +25,14 @@ namespace ASP.NET_MVC_testapp.Controllers
             return View(_event);
         }
 
+        public IActionResult DeleteEvent(int? id)
+        {
+            var _event = _context.Events.Find(id);
+            if (_event == null)
+                return NotFound();
+            return View(_event);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateEvent(EventViewModel viewModel)
         {
@@ -165,6 +173,21 @@ namespace ASP.NET_MVC_testapp.Controllers
         private bool EventExists(int id)
         {
             return (_context.Events?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        
+        public IActionResult Delete(int id)
+        {
+            var _events = _context.eventVisitors.Where(b => b.Event_id == id).ToList();
+            foreach(var item in _events)
+            {
+                _context.eventVisitors.Remove(item);
+                _context.SaveChanges();
+            }
+            var _event = _context.Events.Where(b => b.Id == id).FirstOrDefault();
+            _context.Events.Remove(_event);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

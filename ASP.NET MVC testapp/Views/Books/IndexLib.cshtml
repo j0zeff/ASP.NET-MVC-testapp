@@ -44,12 +44,17 @@
                             <form action="/MyBooks/OnPostAddToMyBook" method="post">
                                 <input type="hidden" name="BookId" value="@book.BookId" />
                                 <input type="hidden" name="pageNumber" value="@Model.PageIndex" />
-                                <select name="SelectedOption">
-                                    <option value="favorites">To favorite</option>
-                                    <option value="alreadyRead">To Already Read</option>
-                                    <option value="currentlyReading">To Current Reading</option>
-                                    <option value="willRead">To Future Read</option>
-                                </select>
+                                @{
+                                    if (User.IsInRole("User"))
+                                    {
+                                        <select name="SelectedOption">
+                                            <option value="favorites">To favorite</option>
+                                            <option value="alreadyRead">To Already Read</option>
+                                            <option value="currentlyReading">To Current Reading</option>
+                                            <option value="willRead">To Future Read</option>
+                                        </select>
+                                    }
+                                }
                                 <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
                             </form>
                         }
