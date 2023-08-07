@@ -29,25 +29,30 @@
                             <td>@book.ReleaseDate</td>
                             <td>
                                 <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
+                                @if (User.IsInRole("Admin"))
+                                {
+
+                                    <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
+                                    <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
+
+                                }
                                 @if (User.IsInRole("Admin") || User.IsInRole("User"))
                                 {
                                     <form action="/MyBooks/OnPostAddToMyBook" method="post">
                                         <input type="hidden" name="BookId" value="@book.BookId" />
-                                        <select name="SelectedOption">
-                                            <option value="favorites">To favorite</option>
-                                            <option value="alreadyRead">To Already Read</option>
-                                            <option value="currentlyReading">To Current Reading</option>
-                                            <option value="willRead">To Future Read</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
+                                        @{
+                                            if (User.IsInRole("User"))
+                                            {
+                                                <select name="SelectedOption">
+                                                    <option value="favorites">To favorite</option>
+                                                    <option value="alreadyRead">To Already Read</option>
+                                                    <option value="currentlyReading">To Current Reading</option>
+                                                    <option value="willRead">To Future Read</option>
+                                                </select>
+                                                <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
+                                            }
+                                        }
                                     </form>
-                                }
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <text>
-                                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
-                                    </text>
                                 }
                             </td>
                         </tr>
