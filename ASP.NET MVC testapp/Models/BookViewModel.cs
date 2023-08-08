@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ASP.NET_MVC_testapp.Models
 {
-    public class Book
+    public class BookViewModel
     {
         [Key]
         public int BookId { get; set; }
@@ -15,6 +13,6 @@ namespace ASP.NET_MVC_testapp.Models
         public string Genre { get; set; }
         public string BookDescription { get; set; }
         public int ReleaseDate { get; set; }
-        public byte[] Book_image { get; set; }
+        public IFormFile Book_image { get; set; }
     }
 }

@@ -118,15 +118,29 @@ namespace ASP.NET_MVC_testapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Title,AuthorName,AuthorSurname,Pages,Genre,BookDescription,ReleaseDate")] Book book)
+        public async Task<IActionResult> Create(BookViewModel _book)
         {
-            if (ModelState.IsValid)
-            {
+            var book = new Book();
+            book.BookId = _book.BookId;
+            book.Title = _book.Title;
+            book.AuthorName = _book.AuthorName;
+            book.AuthorSurname = _book.AuthorSurname;
+            book.BookDescription = _book.BookDescription;
+            book.ReleaseDate = _book.ReleaseDate;
+            book.Genre = _book.Genre;
+            book.Pages = _book.Pages;
+            
+                if (_book.Book_image != null && _book.Book_image.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await _book.Book_image.CopyToAsync(memoryStream);
+                        book.Book_image = memoryStream.ToArray();
+                    }
+                }
                 _context.Add(book);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction("IndexLib");
-            }
-            return RedirectToAction("IndexLib");
         }
 
         // GET: Books/Edit/5
@@ -139,11 +153,17 @@ namespace ASP.NET_MVC_testapp.Controllers
             }
 
             var book = await _context.Books.FindAsync(id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-            return View(book);
+            var _book = new BookViewModel();
+            _book.AuthorSurname = book.AuthorSurname;
+            _book.BookDescription = book.BookDescription;
+            _book.AuthorName = book.AuthorName;
+            _book.BookId = book.BookId;
+            _book.Title = book.Title;
+            _book.Genre = book.Genre;
+            _book.Pages = book.Pages;
+            _book.ReleaseDate = book.ReleaseDate;
+            
+            return View(_book);
         }
 
         // POST: Books/Edit/5
@@ -151,33 +171,31 @@ namespace ASP.NET_MVC_testapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,AuthorName,AuthorSurname,Pages,Genre,BookDescription,ReleaseDate")] Book book)
+        public async Task<IActionResult> Edit(BookViewModel _book)
         {
-            if (id != book.BookId)
+            var book = _context.Books.Where(b => b.BookId == _book.BookId).FirstOrDefault();
+            book.AuthorName = _book.AuthorName;
+            book.AuthorSurname = _book.AuthorSurname;
+            book.BookDescription = _book.BookDescription;
+            book.ReleaseDate = _book.ReleaseDate;
+            book.Genre = _book.Genre;
+            book.Title = _book.Title;
+            book.Pages = _book.Pages;
+            if(_book.Book_image!= null)
             {
-                return NotFound();
-            }
-            if (ModelState.IsValid)
-            {
-                try
+                using (var memoryStream = new MemoryStream())
                 {
-                    _context.Update(book);
+                    await _book.Book_image.CopyToAsync(memoryStream);
+                    book.Book_image = memoryStream.ToArray();
+                }
+            }
+            
+                    _context.Books.Update(book);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookExists(book.BookId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+               
                 return RedirectToAction("IndexLib");
-            }
-            return View(book);
+            
+           // return View(book);
         }
 
         // GET: Books/Delete/5

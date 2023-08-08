@@ -6,61 +6,39 @@
 }
 
 <h1>Details</h1>
-
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AuthorName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AuthorName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AuthorSurname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AuthorSurname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Pages)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pages)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    @if (User.IsInRole("Admin"))
-    {
-        <text>
-            <a asp-action="Edit" asp-route-id="@Model?.BookId">Edit</a> |
-        </text>
-    }
-    <a asp-area="" asp-controller="Books" asp-action="IndexLib">Back to list</a>
+<h4>Book</h4>
+<hr />
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            @if (Model.Book_image != null && Model.Book_image.Length > 0)
+            {
+                var base64Image = Convert.ToBase64String(Model.Book_image);
+                var imageSrc = $"data:image/jpeg;base64,{base64Image}";
+                <img src="@imageSrc" alt="Image" class="img-fluid">
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@Model.BookId">Edit</a>
+                    <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.BookId">Delete</a>
+                </div>
+            }
+            <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="IndexLib">Back to list</a>
+        </div>
+        <div class="col-md-8">
+            <h1>@Model.Title</h1>
+            <p>Author: @Model.AuthorName @Model.AuthorSurname</p>
+            <hr>
+            <h4>Genre</h4>
+            <p>@Model.Genre</p>
+            <h4>Description:</h4>
+            <p>@Model.BookDescription</p>
+            <hr>
+            <h4>Page number:</h4>
+            <p>@Model.Pages p.</p>
+            <h4>Release date:</h4>
+            <p>@Model.ReleaseDate year</p>
+        </div>
+    </div>
 </div>

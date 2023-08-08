@@ -1,4 +1,4 @@
-﻿@model ASP.NET_MVC_testapp.Models.Book
+﻿@model ASP.NET_MVC_testapp.Models.BookViewModel
 
 @{
     ViewData["title"] = "Edit";
@@ -13,7 +13,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" asp-controller="Books">
+        <form asp-action="Edit" asp-controller="Books" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BookId" />
             <div class="form-group">
@@ -51,9 +51,11 @@
                 <input asp-for="ReleaseDate" class="form-control" />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
-            @*<form asp-action="IndexLib" method="post">
-                
-            </form>*@
+            <div class="form-group">
+                <label asp-for="Book_image" class="control-label">Image</label>
+                <input type="file" name="Book_image" class="form-control" />
+                <span asp-validation-for="Book_image" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <button type="submit" id="saveButton" class="btn btn-primary">Save</button>
             </div>
