@@ -1,0 +1,23 @@
+﻿@model GenreList
+@{
+    ViewData["title"] = "IndexLib";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1 class="jumbotron" style="text-align:center">@Model.title</h1>
+<div class="book-list">
+    @{
+        foreach (var _item in Model.books)
+        {
+            <a style="text-decoration:none;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                <div class="book">
+                    <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                    </div>
+                    <p>@_item.AuthorName @_item.AuthorSurname</p>
+                    <p>Genre: @_item.Genre</p>
+                    <p>Release date: @_item.ReleaseDate</p>
+                    <p>Pages: @_item.Pages</p>
+                </div>
+            </a>
+        }
+    }
+</div>

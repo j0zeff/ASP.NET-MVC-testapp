@@ -27,7 +27,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             _context = context;
             _logger = logger;
         }
-        public IActionResult AddToFavorites(int bookId, bool IsFavorite, string name, string view, string controller, int? pageIndex)
+        public IActionResult AddToFavorites(int bookId, bool IsFavorite, string name, string view, string controller)
         {
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var temp = _context.UserFavoriteBooks.Where(b => b.user_id == currentUserId && b.book_id == bookId).ToList().FirstOrDefault();
@@ -43,7 +43,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                             _context.UserFavoriteBooks.Remove(temp);
                         }
                         _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 4, pageIndex = pageIndex });
+                        return RedirectToAction("ShowList", new { num = 4});
                     }
                     else
                     {
@@ -61,7 +61,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                             _context.UserFavoriteBooks.Remove(temp);
                         }
                         _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 2, pageIndex = pageIndex });
+                        return RedirectToAction("ShowList", new { num = 2});
                     }
                     else
                     {
@@ -79,7 +79,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                             _context.UserFavoriteBooks.Remove(temp);
                         }
                         _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 3, pageIndex = pageIndex});
+                        return RedirectToAction("ShowList", new { num = 3});
                     }
                     else
                     {
@@ -97,7 +97,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                             _context.UserFavoriteBooks.Remove(temp);
                         }
                         _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 1, pageIndex = pageIndex });
+                        return RedirectToAction("ShowList", new { num = 1});
                     }
                     else
                     {
@@ -146,16 +146,15 @@ namespace ASP.NET_MVC_testapp.Controllers
         public IActionResult ShowList(int num, int? pageNumber)
         {
             var ViewModel = GetLists();
-            int pageSize = 5;
 
             if (num == 1)
-                return View(new ListViewModel { booklist = PaginatedList<Book>.Create(ViewModel.alreadyRead, pageNumber ?? 1, pageSize), name = "already" });
+                return View(new ListViewModel { booklist = ViewModel.alreadyRead, name = "already" });
             else if (num == 2)
-                return View(new ListViewModel { booklist = PaginatedList<Book>.Create(ViewModel.currentlyReading, pageNumber ?? 1, pageSize), name = "current" });
+                return View(new ListViewModel { booklist = ViewModel.currentlyReading, name = "current" });
             else if (num == 3)
-                return View(new ListViewModel { booklist = PaginatedList<Book>.Create(ViewModel.willRead, pageNumber ?? 1, pageSize), name = "will" });
+                return View(new ListViewModel { booklist = ViewModel.willRead, name = "will" });
             else if (num == 4)
-                return View(new ListViewModel { booklist = PaginatedList<Book>.Create(ViewModel.favoriteBooks, pageNumber ?? 1, pageSize), name = "favorite" });
+                return View(new ListViewModel { booklist = ViewModel.favoriteBooks, name = "favorite" });
             return NotFound();
         }
         public IActionResult PaginatedList(int? pageNumber, string name)
@@ -290,27 +289,27 @@ namespace ASP.NET_MVC_testapp.Controllers
             }
         }
         [HttpPost]
-        public IActionResult OnPostAddToMyBook(int bookId, string selectedOption, int? pageNumber)
+        public IActionResult OnPostAddToMyBook(int bookId, string selectedOption)
         {
             switch (selectedOption)
             {
                 case "favorites":
-                    AddToFavorites(bookId, true, "favorite", "IndexLib", "Books", pageNumber);
+                    AddToFavorites(bookId, true, "favorite", "IndexLib", "Books");
                     break;
                 case "alreadyRead":
-                    AddToFavorites(bookId, true, "already", "IndexLib", "Books", pageNumber);
+                    AddToFavorites(bookId, true, "already", "IndexLib", "Books");
                     break;
                 case "currentlyReading":
-                    AddToFavorites(bookId, true, "current", "IndexLib", "Books", pageNumber);
+                    AddToFavorites(bookId, true, "current", "IndexLib", "Books");
                     break;
                 case "willRead":
-                    AddToFavorites(bookId, true, "will", "IndexLib", "Books", pageNumber);
+                    AddToFavorites(bookId, true, "will", "IndexLib", "Books");
                     break;
                 default:
 
                     break;
             }
-            return RedirectToRoute(new { action = "IndexLib", controller = "Books" , pageNumber = pageNumber});
+            return RedirectToRoute(new { action = "Details", controller = "Books" , id = bookId});
         }
     }
 }

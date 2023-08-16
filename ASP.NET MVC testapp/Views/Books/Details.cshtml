@@ -11,18 +11,33 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
-            @if (Model.Book_image != null && Model.Book_image.Length > 0)
-            {
-                var base64Image = Convert.ToBase64String(Model.Book_image);
-                var imageSrc = $"data:image/jpeg;base64,{base64Image}";
-                <img src="@imageSrc" alt="Image" class="img-fluid">
-            }
+            <div style="width: auto; height: 480px; background-image: url('data:image/png;base64,@Convert.ToBase64String(Model.Book_image)'); background-size: 100% 100%">
+            
+            </div>
             @if (User.IsInRole("Admin"))
             {
                 <div class="d-flex justify-content-center">
                     <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@Model.BookId">Edit</a>
                     <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.BookId">Delete</a>
                 </div>
+            }
+            @if (User.IsInRole("User") || User.IsInRole("Admin"))
+            {
+                <form action="/MyBooks/OnPostAddToMyBook" method="post">
+                    <input type="hidden" name="BookId" value="@Model.BookId" />
+                    @{
+                        if (User.IsInRole("User") || User.IsInRole("Admin"))
+                        {
+                            <select name="SelectedOption">
+                                <option value="favorites">To favorite</option>
+                                <option value="alreadyRead">To Already Read</option>
+                                <option value="currentlyReading">To Current Reading</option>
+                                <option value="willRead">To Future Read</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
+                        }
+                    }
+                </form>
             }
             <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="IndexLib">Back to list</a>
         </div>

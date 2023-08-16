@@ -1,4 +1,169 @@
-﻿@model PaginatedList<Book>
+﻿@model IndexLibViewModel
+@{
+    ViewData["title"] = "IndexLib";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container text-center mt-4" style="padding-bottom:30px;">
+    <h1 class="jumbotron" style="text-align:center">LIBRARY</h1>
+    @if (User.IsInRole("Admin"))
+    {
+        <text>
+            <a class="btn btn-primary" asp-action="Create">Create New</a>
+        </text>
+    }
+</div>
+<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Adventures">
+    <h3 class="subtitle">Adventures ➝</h3>
+</a>
+<div class="book-list-index">
+    @{
+        int i = 0;
+        foreach (var _item in Model.adventures)
+        {
+            if (i < 5)
+            {
+                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                    <div class="book">
+                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                        </div>
+                        <p>@_item.AuthorName @_item.AuthorSurname</p>
+                        <p>Genre: @_item.Genre</p>
+                        <p>Release date: @_item.ReleaseDate</p>
+                        <p>Pages: @_item.Pages</p>
+                    </div>
+                </a>
+                i++;
+            }
+        }
+    }
+</div>
+<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Poetry">
+    <h3 class="subtitle">Poetry ➝</h3>
+</a>
+<div class="book-list-index">
+    @{
+        i = 0;
+        foreach (var _item in Model.poetry)
+        {
+            if (i < 5)
+            {
+                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                    <div class="book">
+                    <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                    </div>
+                    <p>@_item.AuthorName @_item.AuthorSurname</p>
+                    <p>Genre: @_item.Genre</p>
+                    <p>Release date: @_item.ReleaseDate</p>
+                    <p>Pages: @_item.Pages</p>
+                </div>
+                </a>
+                i++;
+            }
+        }
+    }
+</div>
+<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="History">
+    <h3 class="subtitle">History ➝</h3>
+</a>
+<div class="book-list-index">
+    @{
+        i = 0;
+        foreach (var _item in Model.history)
+        {
+            if (i < 5)
+            {
+                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                    <div class="book">
+                    <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                    </div>
+                    <p>@_item.AuthorName @_item.AuthorSurname</p>
+                    <p>Genre: @_item.Genre</p>
+                    <p>Release date: @_item.ReleaseDate</p>
+                    <p>Pages: @_item.Pages</p>
+                </div>
+                </a>
+                i++;
+            }
+        }
+    }
+</div>
+<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Psychology">
+    <h3 class="subtitle">Psychology ➝</h3>
+</a>
+<div class="book-list-index">
+    @{
+        i = 0;
+        foreach (var _item in Model.psychology)
+        {
+            if (i < 5)
+            {
+                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                    <div class="book">
+                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                        </div>
+                        <p>@_item.AuthorName @_item.AuthorSurname</p>
+                        <p>Genre: @_item.Genre</p>
+                        <p>Release date: @_item.ReleaseDate</p>
+                        <p>Pages: @_item.Pages</p>
+                    </div>
+                </a>
+                i++;
+            }
+        }
+    }
+</div>
+<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Fantasy">
+    <h3 class="subtitle">Fantasy ➝</h3>
+</a>
+<div class="book-list-index">
+    @{
+        i = 0;
+        foreach (var _item in Model.fantasy)
+        {
+            if (i < 5)
+            {
+                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                    <div class="book">
+                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                        </div>
+                        <p>@_item.AuthorName @_item.AuthorSurname</p>
+                        <p>Genre: @_item.Genre</p>
+                        <p>Release date: @_item.ReleaseDate</p>
+                        <p>Pages: @_item.Pages</p>
+                    </div>
+                </a>
+                i++;
+            }
+        }
+    }
+</div>
+<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Science">
+    <h3 class="subtitle">Science ➝</h3>
+</a>
+<div class="book-list-index">
+    @{
+        i = 0;
+        foreach (var _item in Model.science)
+        {
+            if (i < 5)
+            {
+                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                    <div class="book">
+                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                        </div>
+                        <p>@_item.AuthorName @_item.AuthorSurname</p>
+                        <p>Genre: @_item.Genre</p>
+                        <p>Release date: @_item.ReleaseDate</p>
+                        <p>Pages: @_item.Pages</p>
+                    </div>
+                </a>
+                i++;
+            }
+        }
+    }
+</div>
+
+@*@model PaginatedList<Book>
 
 
 @{
@@ -38,7 +203,7 @@
                     <td>@book.AuthorName @book.AuthorSurname</td>
                     <td>@book.ReleaseDate</td>
                     <td>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a> 
+                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
                         @if (User.IsInRole("Admin"))
                         {
 
@@ -97,3 +262,4 @@
         });
     });
 </script>
+*@

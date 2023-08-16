@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-stretchy.css" />
     <link rel="stylesheet" href="~/ASP.NET_MVC_testapp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -29,15 +30,6 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-area="" asp-controller="Books" asp-action="IndexLib">Books</a>
                         </li>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            @*<li class="nav-item">
-                                <a class="nav-link active" asp-area="" asp-controller="Roles" asp-action="Roles">Roles</a>
-                            </li>*@
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Users">Users</a>
-                            </li>
-                        }
                     </ul>
                 </div>
             </div>
@@ -49,15 +41,24 @@
             @RenderBody()
         </main>
     </div>
-
-@*    <footer class="footer text-muted position-absolute bottom">
-        <div>
-            &copy; 2023 - ASP.NET_MVC_testapp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer">
+        <ul class="list-inline">
+            <li class="list-inline-item p-3"><a href="#"><i class="fab fa-facebook"></i></a></li>
+            <li class="list-inline-item p-3"><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li class="list-inline-item p-3"><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <li class="list-inline-item p-3"><a href="#"><i class="fab fa-linkedin"></i></a></li>
+        </ul>
+        <div class="footer-inner">
+            <p>123 Main Street, Cityville, Country</p>
+            <p>Email: contact@example.com</p>
+            <p>Phone: +1 (123) 456-7890</p>
         </div>
-    </footer>*@
+    </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

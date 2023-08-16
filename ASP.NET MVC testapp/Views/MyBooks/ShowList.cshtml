@@ -5,62 +5,123 @@
     ViewData["title"] = "IndexLib";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>LIBRARY</h1>
-
-<div id="searchResultsContainer">
-    <table class="table">
-        <thead>
-            <tr class="table-dark">
-                <th>Title</th>
-                <th>Author</th>
-                <th>Year</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var book in Model.booklist)
-            {
-                <tr>
-                    <td>@book.Title</td>
-                    <td>@book.AuthorName @book.AuthorSurname</td>
-                    <td>@book.ReleaseDate</td>
-                    <td>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
-                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
-                        {
-                            <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="@true">Like</a>
-                            if (Model.name == "favorite")
-                            {
-                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="favorite" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
-                            }
-                            else if (Model.name == "current")
-                            {
-                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="current" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
-                            }
-                            else if (Model.name == "already")
-                            {
-                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="already" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
-                            }
-                            else if (Model.name == "will")
-                            {
-                                <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
-                            }
-                        }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <text>
-                                <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                            </text>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    @{
-        var prevDisabled = !Model.booklist.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.booklist.HasNextPage ? "disabled" : "";
+@{
+    if (Model.name == "favorite")
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Your favorite books</h1>
     }
-    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.booklist.PageIndex-1)" asp-route-name="@Model.name" class="btn btn-default @prevDisabled">Previous</a>
-    <a asp-action="PaginatedList" asp-route-pageNumber="@(Model.booklist.PageIndex+1)" asp-route-name="@Model.name" class=" btn btn-default @nextDisabled">Next</a>
-</div>
+    else if (Model.name == "will")
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Books which you are planning to read</h1>
+    }
+    else if (Model.name == "already")
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Books which you are already read</h1>
+    }
+    else
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Books which you are reading now</h1>
+    }
+}
+@{
+    if (Model.booklist.Count == 0)
+    {
+        <h3 style="text-align:center; margin-top:50px">Now your Book-List is empty...</h3>
+        <h4 style="text-align:center; margin-top:25px">but, you can add some books to your list!</h4>
+        <div class="container text-center mt-4">
+            <a class="btn btn-primary btn-lg" style="align-content:center; margin-top:25px" asp-controller="Books" asp-action="IndexLib">Search books</a>
+        </div>
+    }
+    else
+    {
+        <div class="book-list">
+            @{
+                foreach (var _item in Model.booklist)
+                {
+                    <div class="book-with-btn">
+                        <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                            <div class="book">
+                                <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                                </div>
+                                <p>@_item.AuthorName @_item.AuthorSurname</p>
+                                <p>Genre: @_item.Genre</p>
+                                <p>Release date: @_item.ReleaseDate</p>
+                                <p>Pages: @_item.Pages</p>
+                            </div>
+                        </a>
+                        @if (Model.name == "favorite")
+                        {
+                            <a class="half-circle-button" style="width: 220px; margin-right:20px; margin-left:20px; margin-bottom: 30px;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="favorite" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                        }
+                        else if (Model.name == "current")
+                        {
+                            <a class="half-circle-button" style="width: 220px; margin-right:20px; margin-left:20px; margin-bottom: 30px;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="current" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                        }
+                        else if (Model.name == "already")
+                        {
+                            <a class="half-circle-button" style="width: 220px; margin-right:20px; margin-left:20px; margin-bottom: 30px;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="already" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                        }
+                        else if (Model.name == "will")
+                        {
+                            <a class="half-circle-button" style="width: 220px; margin-right:20px; margin-left:20px; margin-bottom: 30px;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+                        }
+                    </div>
+                }
+            }
+        </div>
+        //<div class="book-list">
+        //    @{
+        //        foreach (var _item in Model.booklist)
+        //        {
+        //            <a style="texasp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+        //                    <div class="book">
+        //                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+        //                        </div>
+        //                        <p>@_item.AuthorName @_item.AuthorSurname</p>
+        //                        <p>Genre: @_item.Genre</p>
+        //                        <p>Release date: @_item.ReleaseDate</p>
+        //                        <p>Pages: @_item.Pages</p>
+        //                    @if (Model.name == "favorite")
+        //                    {
+        //                    <a class="btn btn-primary " asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="favorite" asp-route-view="ShowList" asp-route-controller="MyBooks"></a>
+        //                    }
+        //                    else if (Model.name == "current")
+        //                    {
+        //                    <a class="btn btn-primary mx-2" style="padding:0; height:32px; width:20px background-color:gray; border-color:gray;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="current" asp-route-view="ShowList" asp-route-controller="MyBooks"><i class="fas fa-times" style="font-size:x-small"></i></a>
+        //                    }
+        //                    else if (Model.name == "already")
+        //                    {
+        //                    <a class="btn btn-primary mx-2" style="padding:0; height:32px; width:20px background-color:gray; border-color:gray;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="already" asp-route-view="ShowList" asp-route-controller="MyBooks"><i class="fas fa-times" style="font-size:x-small"></i></a>
+        //                    }
+        //                    else if (Model.name == "will")
+        //                    {
+        //                    <a class="btn btn-primary mx-2" style="padding:0; height:32px; width:20px background-color:gray; border-color:gray; font-size:x-small;" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@_item.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks"><i class="fas fa-times" style="font-size:x-small"></i></a>
+        //                    }
+        //                    </div>
+        //                </a>
+        //        }
+        //    }
+        //</div>
+    }
+}
+
+@*@if (User.IsInRole("Admin") || User.IsInRole("User"))
+{
+    <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="@true">Like</a>
+    if (Model.name == "favorite")
+    {
+        <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="favorite" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+    }
+    else if (Model.name == "current")
+    {
+        <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="current" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+    }
+    else if (Model.name == "already")
+    {
+        <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="already" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+    }
+    else if (Model.name == "will")
+    {
+        <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
+    }
+}*@

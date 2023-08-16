@@ -2,7 +2,7 @@
 {
     public class ListViewModel
     {
-        public PaginatedList<Book> booklist { get; set; }
+        public List<Book> booklist { get; set; }
         public string name { get; set; }
 
     }

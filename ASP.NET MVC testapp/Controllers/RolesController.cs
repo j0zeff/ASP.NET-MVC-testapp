@@ -34,7 +34,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             {
                 _roleManager.CreateAsync(new IdentityRole(model.Name)).GetAwaiter().GetResult();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
 

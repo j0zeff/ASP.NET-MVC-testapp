@@ -9,6 +9,7 @@ using ASP.NET_MVC_testapp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
@@ -82,10 +83,16 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books
-        public IActionResult IndexLib(int? pageNumber)
+        public IActionResult IndexLib()
         {
-            int pageSize = 5;
-            return View(PaginatedList<Book>.Create(_context.Books.ToList(), pageNumber ?? 1, pageSize));
+            var books = new IndexLibViewModel();
+            books.adventures = _context.Books.Where(b => b.Genre == "adventures").ToList();
+            books.history = _context.Books.Where(b => b.Genre == "history").ToList();
+            books.poetry = _context.Books.Where(b => b.Genre == "poetry").ToList();
+            books.psychology = _context.Books.Where(b => b.Genre == "psychology").ToList();
+            books.science = _context.Books.Where(b => b.Genre == "science").ToList();
+            books.fantasy = _context.Books.Where(b => b.Genre == "fantasy").ToList();
+            return View(books);
         }
 
         // GET: Books/Details/5
@@ -221,9 +228,12 @@ namespace ASP.NET_MVC_testapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Books == null)
+            if(id!=0)
             {
-                return Problem("Entity set 'MyDbContext.Book'  is null.");
+                foreach (var item in _context.UserFavoriteBooks.Where(b => b.book_id == id).ToList())
+                {
+                    _context.UserFavoriteBooks.Remove(item);
+                }                
             }
             var book = await _context.Books.FindAsync(id);
             if (book != null)
@@ -238,6 +248,38 @@ namespace ASP.NET_MVC_testapp.Controllers
         private bool BookExists(int id)
         {
             return (_context.Books?.Any(e => e.BookId == id)).GetValueOrDefault();
+        }
+        public IActionResult ShowGenreList(string title)
+        {
+            GenreList genreList = new GenreList();
+            genreList.title = title;
+
+            if(title=="Science")
+            {
+               genreList.books = _context.Books.Where(b => b.Genre == "science").ToList();
+            }
+            else if (title == "Adventures")
+            {
+                genreList.books = _context.Books.Where(b => b.Genre == "adventures").ToList();
+            }
+            else if (title == "Poetry")
+            {
+                genreList.books = _context.Books.Where(b => b.Genre == "poetry").ToList();
+
+            }
+            else if (title == "Fantasy")
+            {
+                genreList.books = _context.Books.Where(b => b.Genre == "fantasy").ToList();
+            }
+            else if (title == "History")
+            {
+                genreList.books = _context.Books.Where(b => b.Genre == "history").ToList();
+            }
+            else if (title == "Psychology")
+            {
+                genreList.books = _context.Books.Where(b => b.Genre == "psychology").ToList();
+            }
+            return View(genreList);
         }
     }
 }
