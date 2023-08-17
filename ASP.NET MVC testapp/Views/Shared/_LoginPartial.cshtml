@@ -6,29 +6,29 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a class="nav-link active" asp-area="" asp-controller="MyBooks" asp-action="Index">My Books</a>
+        <li class="nav-item" style="height:58px">
+            <a class="nav-link active" style="font-size: 25px; padding-right: 15px; padding-top: 10px; margin-left: 400px; width:150px; height:58px" asp-area="" asp-controller="MyBooks" asp-action="Index">My Books</a>
         </li>
-        <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        <li class="nav-item" style="height:58px">
+            <a id="manage" class="nav-link text-dark" style="margin-top:10px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" style="height:58px">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0" style="margin-top:10px;">Logout</button>
             </form>
         </li>
         
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link active" asp-area="" asp-controller="MyBooks" asp-action="Index">My Books</a>
+        <li class="nav-item" style="height:58px">
+            <a class="nav-link active" style="font-size: 25px; padding-right: 15px; padding-top: 10px; margin-left: 400px; width:150px; height:58px" asp-area="Identity" asp-page="/Account/Login">My Books</a>
         </li>
-        <li class="nav-item">
-            <a class="btn btn-primary" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <li class="nav-item" style="height:58px"v>
+            <a class="btn btn-primary" style="margin-top:10px;" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
-        <li class="nav-item">
-            <a class="btn btn-outline-info" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <li class="nav-item" style="height:58px">
+            <a class="btn btn-outline-info" id="register" style="margin-top:10px;" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
         
     }

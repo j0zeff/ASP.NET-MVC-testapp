@@ -309,7 +309,8 @@ namespace ASP.NET_MVC_testapp.Controllers
 
                     break;
             }
-            return RedirectToRoute(new { action = "Details", controller = "Books" , id = bookId});
+            string successMessage = "Added successfully!";
+            return Json(new { message = successMessage });
         }
     }
 }

@@ -20,8 +20,13 @@ namespace ASP.NET_MVC_testapp.Controllers
         public IActionResult EventPage(int? id)
         {
             var _event = _context.Events.Find(id);
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_event == null)
                 return NotFound();
+           _event.visitors = _context.eventVisitors.Where(b => b.Event_id == id).Count();
+            if(_context.eventVisitors.Where(b => b.User_id == currentUserId && b.Event_id == _event.Id).Count() > 0)
+                _event.isVisited = true;
+            else _event.isVisited = false;
             return View(_event);
         }
 
@@ -89,9 +94,11 @@ namespace ASP.NET_MVC_testapp.Controllers
                     };
                     _context.eventVisitors.Add(visitor);
                     _context.SaveChanges();
-                    return RedirectToRoute(new { action = "EventPage", controller = "Event", id = EventId });
+                    string _message = "Successfully!";
+                    return Json(new { message = _message });
                 }
-                return RedirectToRoute(new { action = "EventPage", controller = "Event", id = EventId });
+                string message = "Failed, already added to visited";
+                return Json(new { message = message });
             }
             else
                 return NotFound();
@@ -188,6 +195,19 @@ namespace ASP.NET_MVC_testapp.Controllers
             _context.Events.Remove(_event);
             _context.SaveChanges();
             return RedirectToAction("Index", "Home");
+        }
+        
+        public IActionResult DeleteVisitor(int event_id)
+        {   string message = "Successfully deleted!";
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_context.eventVisitors.Where(b => b.User_id == currentUserId && b.Event_id == event_id).FirstOrDefault() != null)
+            {
+                _context.eventVisitors.Remove(_context.eventVisitors.Where(b => b.User_id == currentUserId && b.Event_id == event_id).FirstOrDefault());
+                _context.SaveChanges();
+                return Json(new { message = message });
+            }
+            else message = "already deleted!";
+            return Json(new { message = message });
         }
     }
 }

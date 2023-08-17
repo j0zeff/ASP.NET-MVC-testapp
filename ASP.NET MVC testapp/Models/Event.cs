@@ -16,6 +16,8 @@ namespace ASP.NET_MVC_testapp.Models
         public string City { get; set; }
         public string Organizer_name { get; set; }
         public string Organizer_email { get; set; }
+        public int visitors = 0;
+        public bool isVisited;
 
     }
 }

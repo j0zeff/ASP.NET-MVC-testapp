@@ -14,8 +14,21 @@
             <div class="col-md-4">
                 <div style="width: auto; height: 300px; background-image: url('data:image/png;base64,@Convert.ToBase64String(Model.image_data)'); background-size: 100% 100%">
                 </div>
+                <div id="notification" class="alert alert-success" style="display:none; "></div>
                 <div class="d-flex justify-content-center">
-                    <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Event" asp-action="AddToEventVisitors" asp-route-EventId="@Model.Id">Visit</a>
+                    @{
+                        if (User.IsInRole("Admin") || User.IsInRole("User"))
+                        {
+                            if (!Model.isVisited)
+                            {
+                                <a id="showNotificationButton" class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Event" asp-action="AddToEventVisitors" asp-route-EventId="@Model.Id">Visit</a>
+                            }
+                            if (Model.isVisited)
+                            {
+                                <a id="showDeleteNotificationButton" class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Event" asp-action="DeleteVisitor" asp-route-EventId="@Model.Id">Delete</a>
+                            }
+                        }
+                    }
                 </div>
                 @if (User.IsInRole("Admin"))
                 {
@@ -40,9 +53,46 @@
                 <h4>Organizer:</h4>
                 <p>Organizer Name: <strong>@Model.Organizer_name</strong></p>
                 <p>Contact Email: <strong>@Model.Organizer_email</strong></p>
+                <p>Visitors: @Model.visitors</p>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#showNotificationButton').click(function (e) {
+                e.preventDefault();
+                var eventId = @Model.Id; // Extract the EventId from the link's attribute
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Event/AddToEventVisitors',
+                    data: { EventId: eventId }, // Pass the extracted EventId to the action
+                    success: function (data) {
+                        $('#notification').text(data.message).fadeIn().delay(3000).fadeOut();
+                    },
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('#showDeleteNotificationButton').click(function (e) {
+                e.preventDefault();
+                var eventId = @Model.Id; // Extract the EventId from the link's attribute
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Event/DeleteVisitor',
+                    data: { event_id: eventId }, // Pass the extracted EventId to the action
+                    success: function (data) {
+                        $('#notification').text(data.message).fadeIn().delay(3000).fadeOut();
+                    },
+                });
+            });
+        });
+    </script>
+}
 

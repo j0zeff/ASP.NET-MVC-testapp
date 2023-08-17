@@ -34,11 +34,14 @@
                                 <option value="currentlyReading">To Current Reading</option>
                                 <option value="willRead">To Future Read</option>
                             </select>
-                            <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
+                            
+                            <button type="submit" id="showNotificationButton" class="btn btn-primary mx-2">Add to MyBook</button>
                         }
                     }
                 </form>
             }
+            <div id="notification" class="alert alert-success" style="display:none; "></div>
+            
             <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="IndexLib">Back to list</a>
         </div>
         <div class="col-md-8">
@@ -57,3 +60,23 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#showNotificationButton').click(function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/MyBooks/OnPostAddToMyBook',
+                    data: form.serialize(),
+                    success: function (data) {
+                        $('#notification').text(data.message).fadeIn().delay(3000).fadeOut();
+                    },
+                });
+            });
+        });
+    </script>
+}
