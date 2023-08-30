@@ -7,259 +7,83 @@
     <h1 class="jumbotron" style="text-align:center">LIBRARY</h1>
     @if (User.IsInRole("Admin"))
     {
-        <text>
-            <a class="btn btn-primary" asp-action="Create">Create New</a>
-        </text>
-    }
-</div>
-<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Adventures">
-    <h3 class="subtitle">Adventures ➝</h3>
-</a>
-<div class="book-list-index">
-    @{
-        int i = 0;
-        foreach (var _item in Model.adventures)
-        {
-            if (i < 5)
-            {
-                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
-                    <div class="book">
-                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
-                        </div>
-                        <p>@_item.AuthorName @_item.AuthorSurname</p>
-                        <p>Genre: @_item.Genre</p>
-                        <p>Release date: @_item.ReleaseDate</p>
-                        <p>Pages: @_item.Pages</p>
+        <a class="btn btn-primary" asp-action="Create">Add new Book</a>
+        //<a class="btn btn-primary" asp-action="Add_new_genre"></a>
+
+        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add new genre</button>
+
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Вміст модального вікна -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add new genre</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                </a>
-                i++;
-            }
-        }
-    }
-</div>
-<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Poetry">
-    <h3 class="subtitle">Poetry ➝</h3>
-</a>
-<div class="book-list-index">
-    @{
-        i = 0;
-        foreach (var _item in Model.poetry)
-        {
-            if (i < 5)
-            {
-                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
-                    <div class="book">
-                    <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                    <div class="modal-body">
+                        <input type="text" id="enteredText" />
+                        <button id="addGenreButton" type="button">Add</button> <!-- Add an ID and set type to "button" -->
                     </div>
-                    <p>@_item.AuthorName @_item.AuthorSurname</p>
-                    <p>Genre: @_item.Genre</p>
-                    <p>Release date: @_item.ReleaseDate</p>
-                    <p>Pages: @_item.Pages</p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-                </a>
-                i++;
-            }
-        }
-    }
-</div>
-<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="History">
-    <h3 class="subtitle">History ➝</h3>
-</a>
-<div class="book-list-index">
-    @{
-        i = 0;
-        foreach (var _item in Model.history)
-        {
-            if (i < 5)
-            {
-                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
-                    <div class="book">
-                    <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
-                    </div>
-                    <p>@_item.AuthorName @_item.AuthorSurname</p>
-                    <p>Genre: @_item.Genre</p>
-                    <p>Release date: @_item.ReleaseDate</p>
-                    <p>Pages: @_item.Pages</p>
-                </div>
-                </a>
-                i++;
-            }
-        }
-    }
-</div>
-<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Psychology">
-    <h3 class="subtitle">Psychology ➝</h3>
-</a>
-<div class="book-list-index">
-    @{
-        i = 0;
-        foreach (var _item in Model.psychology)
-        {
-            if (i < 5)
-            {
-                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
-                    <div class="book">
-                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
-                        </div>
-                        <p>@_item.AuthorName @_item.AuthorSurname</p>
-                        <p>Genre: @_item.Genre</p>
-                        <p>Release date: @_item.ReleaseDate</p>
-                        <p>Pages: @_item.Pages</p>
-                    </div>
-                </a>
-                i++;
-            }
-        }
-    }
-</div>
-<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Fantasy">
-    <h3 class="subtitle">Fantasy ➝</h3>
-</a>
-<div class="book-list-index">
-    @{
-        i = 0;
-        foreach (var _item in Model.fantasy)
-        {
-            if (i < 5)
-            {
-                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
-                    <div class="book">
-                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
-                        </div>
-                        <p>@_item.AuthorName @_item.AuthorSurname</p>
-                        <p>Genre: @_item.Genre</p>
-                        <p>Release date: @_item.ReleaseDate</p>
-                        <p>Pages: @_item.Pages</p>
-                    </div>
-                </a>
-                i++;
-            }
-        }
-    }
-</div>
-<a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="Science">
-    <h3 class="subtitle">Science ➝</h3>
-</a>
-<div class="book-list-index">
-    @{
-        i = 0;
-        foreach (var _item in Model.science)
-        {
-            if (i < 5)
-            {
-                <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
-                    <div class="book">
-                        <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
-                        </div>
-                        <p>@_item.AuthorName @_item.AuthorSurname</p>
-                        <p>Genre: @_item.Genre</p>
-                        <p>Release date: @_item.ReleaseDate</p>
-                        <p>Pages: @_item.Pages</p>
-                    </div>
-                </a>
-                i++;
-            }
-        }
-    }
-</div>
+            </div>
+        </div>
 
-@*@model PaginatedList<Book>
-
-
+    }
+</div>
 @{
-    ViewData["title"] = "IndexLib";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<h1>LIBRARY</h1>
-
-<p>
-    @if (User.IsInRole("Admin"))
+    foreach (var item in Model.Lists_book)
     {
-        <text>
-            <a asp-action="Create">Create New</a>
-        </text>
-    }
-
-</p>
-<form>
-    <input type="text" id="searchInput" placeholder="Enter book title or author">
-</form>
-
-<div id="searchResultsContainer">
-    <table class="table">
-        <thead>
-            <tr class="table-dark">
-                <th>Title</th>
-                <th>Author</th>
-                <th>Year</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var book in Model)
-            {
-                <tr>
-                    <td>@book.Title</td>
-                    <td>@book.AuthorName @book.AuthorSurname</td>
-                    <td>@book.ReleaseDate</td>
-                    <td>
-                        <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
-                        @if (User.IsInRole("Admin"))
+        if (item.list.Count > 0)
+        {
+            <a asp-controller="Books" asp-action="ShowGenreList" asp-route-title="@item.Genre">
+                <h3 class="subtitle">@item.Genre ➝</h3>
+            </a>
+            <div class="book-list-index">
+                @{
+                    int i = 0;
+                    foreach (var _item in item.list)
+                    {
+                        if (i < 5)
                         {
-
-                            <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Edit" asp-route-id="@book.BookId">Edit</a>
-                            <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
-
+                            <a style="text-decoration:none; width:220px; height:300px; margin-right:20px; margin-left:20px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                                <div class="book">
+                                    <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                                    </div>
+                                    <p>@_item.AuthorName @_item.AuthorSurname</p>
+                                    <p>Genre: @_item.Genre</p>
+                                    <p>Release date: @_item.ReleaseDate</p>
+                                    <p>Pages: @_item.Pages</p>
+                                </div>
+                            </a>
+                            i++;
                         }
-                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
-                        {
-                            <form action="/MyBooks/OnPostAddToMyBook" method="post">
-                                <input type="hidden" name="BookId" value="@book.BookId" />
-                                <input type="hidden" name="pageNumber" value="@Model.PageIndex" />
-                                @{
-                                    if (User.IsInRole("User"))
-                                    {
-                                        <select name="SelectedOption">
-                                            <option value="favorites">To favorite</option>
-                                            <option value="alreadyRead">To Already Read</option>
-                                            <option value="currentlyReading">To Current Reading</option>
-                                            <option value="willRead">To Future Read</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-primary mx-2">Add to MyBook</button>
-                                    }
-                                }
-                            </form>
-                        }
+                    }
 
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-    }
-    <a asp-action="IndexLib" asp-route-pageNumber="@(Model.PageIndex-1)" class="btn btn-default @prevDisabled">Previous</a>
-    <a asp-action="IndexLib" asp-route-pageNumber="@(Model.PageIndex+1)" class="btn btn-default @nextDisabled">Next</a>
-</div>
-<!-- Include jQuery and the JavaScript code for AJAX search -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#searchInput').on('input', function () {
-            var searchTerm = $(this).val();
-
-            $.ajax({
-                url: '/Books/SearchBooks',
-                type: 'GET',
-                cache: false,
-                data: { searchTerm: searchTerm },
-                success: function (result) {
-                    $('#searchResultsContainer').html(result);
                 }
-            });
+            </div>
+        }
+    }
+}
+
+@section scripts {
+    <script>
+        document.getElementById("addGenreButton").addEventListener("click", function () {
+            var enteredText = document.getElementById("enteredText").value;
+
+            // Send AJAX request to the controller action
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/Books/Add_Genre", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById("result").innerHTML = response.message;
+                }
+            };
+            xhr.send(JSON.stringify(enteredText)); // Pass the enteredText directly
         });
-    });
-</script>
-*@
+    </script>
+}

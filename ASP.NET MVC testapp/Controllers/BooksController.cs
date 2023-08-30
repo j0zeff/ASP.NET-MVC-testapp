@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Azure;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
@@ -17,7 +18,7 @@ namespace ASP.NET_MVC_testapp.Controllers
     public class BooksController : Controller
     {
         private readonly MyDbContext _context;
-        private readonly ILogger _logger;   
+        private readonly ILogger _logger;
 
         public BooksController(MyDbContext context, ILogger<BooksController> logger)
         {
@@ -32,17 +33,17 @@ namespace ASP.NET_MVC_testapp.Controllers
             {
                 using (var transaction = _context.Database.BeginTransaction())
                 {
-                        // Enable IDENTITY_INSERT for the UserFavoriteBooks table
-                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT UserFavoriteBooks ON;");
+                    // Enable IDENTITY_INSERT for the UserFavoriteBooks table
+                    _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT UserFavoriteBooks ON;");
 
-                        var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId };
-                        _context.UserFavoriteBooks.Add(favoriteBook);
-                        _context.SaveChanges();
+                    var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId };
+                    _context.UserFavoriteBooks.Add(favoriteBook);
+                    _context.SaveChanges();
 
-                        // Disable IDENTITY_INSERT after the insert operation
-                        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT UserFavoriteBooks OFF;");
+                    // Disable IDENTITY_INSERT after the insert operation
+                    _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT UserFavoriteBooks OFF;");
 
-                        transaction.Commit();
+                    transaction.Commit();
 
                     return RedirectToAction(nameof(IndexLib));
                 }
@@ -58,10 +59,10 @@ namespace ASP.NET_MVC_testapp.Controllers
             return RedirectToAction(nameof(IndexLib));
         }
 
-    public IActionResult SearchBooks(string searchTerm)
+        public IActionResult SearchBooks(string searchTerm)
         {
             if (searchTerm.IsNullOrEmpty())
-            {       
+            {
                 var FullList = _context.Books.ToList();
                 return PartialView("_BookList", FullList);
             }
@@ -85,14 +86,16 @@ namespace ASP.NET_MVC_testapp.Controllers
         // GET: Books
         public IActionResult IndexLib()
         {
-            var books = new IndexLibViewModel();
-            books.adventures = _context.Books.Where(b => b.Genre == "adventures").ToList();
-            books.history = _context.Books.Where(b => b.Genre == "history").ToList();
-            books.poetry = _context.Books.Where(b => b.Genre == "poetry").ToList();
-            books.psychology = _context.Books.Where(b => b.Genre == "psychology").ToList();
-            books.science = _context.Books.Where(b => b.Genre == "science").ToList();
-            books.fantasy = _context.Books.Where(b => b.Genre == "fantasy").ToList();
-            return View(books);
+            var List = new IndexLibViewModel();
+            var Genre_list = _context.Genre.ToList();
+            foreach (var item in Genre_list)
+            {
+                var _list = new IndexLibBook();
+                _list.list = _context.Books.Where(b => b.Genre == item.Genre_name).ToList();
+                _list.Genre = item.Genre_name;
+                List.Lists_book.Add(_list);
+            }
+            return View(List);
         }
 
         // GET: Books/Details/5
@@ -117,12 +120,15 @@ namespace ASP.NET_MVC_testapp.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var book = new Book();
+            book.Genre_list = _context.Genre.ToList();
+            return View(book);
         }
 
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookViewModel _book)
@@ -136,18 +142,18 @@ namespace ASP.NET_MVC_testapp.Controllers
             book.ReleaseDate = _book.ReleaseDate;
             book.Genre = _book.Genre;
             book.Pages = _book.Pages;
-            
-                if (_book.Book_image != null && _book.Book_image.Length > 0)
+
+            if (_book.Book_image != null && _book.Book_image.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await _book.Book_image.CopyToAsync(memoryStream);
-                        book.Book_image = memoryStream.ToArray();
-                    }
+                    await _book.Book_image.CopyToAsync(memoryStream);
+                    book.Book_image = memoryStream.ToArray();
                 }
-                _context.Add(book);
-                _context.SaveChanges();
-                return RedirectToAction("IndexLib");
+            }
+            _context.Add(book);
+            _context.SaveChanges();
+            return RedirectToAction("IndexLib");
         }
 
         // GET: Books/Edit/5
@@ -169,7 +175,8 @@ namespace ASP.NET_MVC_testapp.Controllers
             _book.Genre = book.Genre;
             _book.Pages = book.Pages;
             _book.ReleaseDate = book.ReleaseDate;
-            
+            _book.genres = _context.Genre.ToList();
+
             return View(_book);
         }
 
@@ -188,7 +195,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             book.Genre = _book.Genre;
             book.Title = _book.Title;
             book.Pages = _book.Pages;
-            if(_book.Book_image!= null)
+            if (_book.Book_image != null)
             {
                 using (var memoryStream = new MemoryStream())
                 {
@@ -196,13 +203,13 @@ namespace ASP.NET_MVC_testapp.Controllers
                     book.Book_image = memoryStream.ToArray();
                 }
             }
-            
-                    _context.Books.Update(book);
-                    await _context.SaveChangesAsync();
-               
-                return RedirectToAction("IndexLib");
-            
-           // return View(book);
+
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("IndexLib");
+
+            // return View(book);
         }
 
         // GET: Books/Delete/5
@@ -228,12 +235,12 @@ namespace ASP.NET_MVC_testapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if(id!=0)
+            if (id != 0)
             {
                 foreach (var item in _context.UserFavoriteBooks.Where(b => b.book_id == id).ToList())
                 {
                     _context.UserFavoriteBooks.Remove(item);
-                }                
+                }
             }
             var book = await _context.Books.FindAsync(id);
             if (book != null)
@@ -254,9 +261,9 @@ namespace ASP.NET_MVC_testapp.Controllers
             GenreList genreList = new GenreList();
             genreList.title = title;
 
-            if(title=="Science")
+            if (title == "Science")
             {
-               genreList.books = _context.Books.Where(b => b.Genre == "science").ToList();
+                genreList.books = _context.Books.Where(b => b.Genre == "science").ToList();
             }
             else if (title == "Adventures")
             {
@@ -281,5 +288,15 @@ namespace ASP.NET_MVC_testapp.Controllers
             }
             return View(genreList);
         }
+        [HttpPost]
+        public IActionResult Add_Genre([FromBody] string name)
+        {
+            var genre = new Genre();
+            genre.Genre_name = name;
+            _context.Genre.Add(genre);
+            _context.SaveChanges();
+            return RedirectToAction("IndexLib");
+        }
+ 
     }
 }

@@ -14,5 +14,6 @@ namespace ASP.NET_MVC_testapp.Models
         public string BookDescription { get; set; }
         public int ReleaseDate { get; set; }
         public IFormFile Book_image { get; set; }
+        public List<Genre> genres;
     }
 }
