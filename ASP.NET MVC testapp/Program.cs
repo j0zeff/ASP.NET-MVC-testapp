@@ -4,6 +4,10 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using NuGet.Protocol;
+using ASP.NET_MVC_testapp.Settings;
+using SendGrid.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ASP.NET_MVC_testapp.SendGrid;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +24,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders().A
     .AddEntityFrameworkStores<MyDbContext>();
 
 
+builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGridSettings"));
 
+builder.Services.AddSendGrid(options =>
+{
+    options.ApiKey = builder.Configuration.GetSection("SendGridSettings").GetValue<string>("ApiKey");
+});
+
+builder.Services.AddScoped<IEmailSender, EmailSenderServices>();
 
 var app = builder.Build();
 

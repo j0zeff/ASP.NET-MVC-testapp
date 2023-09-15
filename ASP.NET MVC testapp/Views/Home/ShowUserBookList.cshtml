@@ -1,0 +1,53 @@
+﻿@model ListViewModel
+
+
+@{
+    ViewData["title"] = "IndexLib";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    if (Model.name == "favorite")
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">@Model.userNickname`s favorite books</h1>
+    }
+    else if (Model.name == "will")
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Books which @Model.userNickname plan to read</h1>
+    }
+    else if (Model.name == "already")
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Books which @Model.userNickname have already read</h1>
+    }
+    else
+    {
+        <h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Books which @Model.userNickname are currently reading</h1>
+    }
+}
+@{
+    if (Model.booklist.Count == 0)
+    {
+        <h3 style="text-align:center; margin-top:50px">List is empty...</h3>
+    }
+    else
+    {
+        <div class="book-list">
+            @{
+                foreach (var _item in Model.booklist)
+                {
+                    <div class="book-with-btn">
+                        <a style="text-decoration:none; width:220px; height:300px;" asp-controller="Books" asp-action="Details" asp-route-id="@_item.BookId">
+                            <div class="book">
+                                <div class="cover" style="background-image: url('data:image/png;base64,@Convert.ToBase64String(_item.Book_image)');">
+                                </div>
+                                <p>@_item.AuthorName @_item.AuthorSurname</p>
+                                <p>Genre: @_item.Genre</p>
+                                <p>Release date: @_item.ReleaseDate</p>
+                                <p>Pages: @_item.Pages</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    }
+}

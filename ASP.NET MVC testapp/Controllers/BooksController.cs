@@ -11,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Azure;
+using System.Drawing;
+using Microsoft.Identity.Web;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
@@ -99,6 +101,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Books == null)
@@ -114,6 +117,53 @@ namespace ASP.NET_MVC_testapp.Controllers
             }
 
             return View(book);
+        }
+
+
+        [HttpGet]
+        public IActionResult CommentsPartial(int BookId)
+        {
+            List<Comment> comments = new List<Comment>();
+            var AllComments = _context.Comments.ToList();
+            foreach (var item in AllComments)
+            {
+                if (item.BookId == BookId)
+                {
+                    var comment = new Comment()
+                    {
+                        Id = item.Id,
+                        BookId = item.BookId,
+                        UserId = item.UserId,
+                        CommentText = item.CommentText,
+                        DateAndTime = item.DateAndTime,
+                        User = _context.AplicationUsers.Where(b => b.Id == item.UserId).FirstOrDefault(),
+                    };
+                    comments.Add(comment);
+                }
+            }
+            return PartialView(comments);
+
+        }
+
+        [HttpPost]
+        public IActionResult AddComment(int BookId, string CommentText)
+        {
+                if (!CommentText.IsNullOrEmpty())
+                {
+                    string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var comment = new Comment()
+                    {
+                        BookId = BookId,
+                        UserId = UserId,
+                        DateAndTime = DateTime.Now,
+                        CommentText = CommentText,
+                    };
+                    _context.Comments.Add(comment);
+                    _context.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+                return BadRequest();
         }
 
         // GET: Books/Create
@@ -213,6 +263,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Books == null)
@@ -289,7 +340,7 @@ namespace ASP.NET_MVC_testapp.Controllers
             return View(genreList);
         }
         [HttpPost]
-        public IActionResult Add_Genre([FromBody] string name)
+        public IActionResult Add_Genre(string name)
         {
             var genre = new Genre();
             genre.Genre_name = name;
@@ -297,6 +348,46 @@ namespace ASP.NET_MVC_testapp.Controllers
             _context.SaveChanges();
             return RedirectToAction("IndexLib");
         }
- 
+
+        [HttpGet]
+        public IActionResult SearchBook()
+        {
+            var genreList = _context.Genre.ToList();
+            return View(genreList);
+        }
+
+        [HttpPost]
+        public IActionResult PartialSearchBook(string Author, string Title, int PageNumber, int Date, string Genre)
+        {
+            var queryBook = _context.Books.AsQueryable();
+            if (!Author.IsNullOrEmpty())
+            {
+                queryBook = queryBook.Where(b => b.AuthorName.Contains(Author) || b.AuthorSurname.Contains(Author));
+            }
+
+            if (!Genre.IsNullOrEmpty())
+            {
+                queryBook = queryBook.Where(b => b.Genre.Contains(Genre));
+            }
+
+            if (!Title.IsNullOrEmpty())
+            {
+                queryBook = queryBook.Where(b => b.Title.Contains(Title));
+            }
+
+            if (PageNumber > 0)
+            {
+                queryBook = queryBook.Where(b => b.Pages == PageNumber);
+            }
+
+            if (Date > 0)
+            {
+                queryBook = queryBook.Where(b => b.ReleaseDate == Date);
+            }
+
+            var list = queryBook.ToList();
+            return PartialView(list);
+        }
+
     }
 }

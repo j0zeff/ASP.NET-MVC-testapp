@@ -1,0 +1,141 @@
+﻿@model UserProfileViewModel
+
+@{
+    ViewData["title"] = Model._user.Nickname + " Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Library Profile</title>
+</head>
+<body>
+
+    <div class="container" style="padding-bottom:16px;">
+        <div class="row banner">
+            <div class="col-md-12" style="padding:20px 0;">
+                @{
+                    if (Model._user.UserImage == null || Model._user.UserImage.Length == 0)
+                    {
+                        <div style="width: auto; margin: auto; height: 300px; border-radius:50%; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAATlBMVEV8fHz///95eXl2dnZzc3P7+/uHh4f39/fk5OS6urp/f3+3t7fc3Nz09PTX19enp6fDw8Pt7e3JycmPj4+YmJjR0dFubm6hoaGxsbFpaWk+hcYGAAADlElEQVR4nO2aa7qjMAiGFWJqrPf77H+jU+u0x1ptAyGe+eG7gXwPAUKAIDg5OTk5OTk5OfEJoOrvKAT4jeNRD9c6j6sqTjtTNIE6VgVCc42zcMGlKofkOFtgMMRR+E5lNB4iApNrtXH+bIu6Qe8CAIZ4T8BEZhLPhoCk3LqCJWnr1RCoP5rg320UyqOC4ZsJZmpvoYHFxUpBGHaBHw32CiY7+FAAjd0tzBgPPgl6NxtsUshrSHKSgjBrpe8CR5qCW34QlgBN9v3QFaNselAdWUGYiSoATVcgHBVYcyRUWk4BaPuktGSUMwNeWQrCNBGTAClPwkUsN3AicuYqdRP0tPQgl7KCYsXDRCXlDGhRKm0TNUJmSGhv5JJCRgI0vKwwIeSPtFrlFaEcDS1bQVifEiYJMjUDNHwJpZQ7/npEBMTaeYlQXgiAnR1DqaeSUzjOZFJ1E7diESzkoeX6o1BA3EiYzhANYt8ZVfIkxIK1I/OhMoJ/OiT+aWcyqYJlgvdMyPY5FKeM16ISON5QCjfegBwUYtXzU4JNx3FJJN/pwZZ2FaWHnhsWFAWdvIAbytgrSD01w9HaJWPZeFwAlq+2LxvcNRQ23/za60gC2q+xmY2eZyIYmM/BmR8wGlJNt19ExcUhs0KAttx0iUte+B5MLUQ0Y75SEcVl62kQsiMCQQ8mj+crqdKyaOCYGeVKhur/3Ol79RtD6/8CuJn+CR5/DajUzRnuk/tsmt3XYxv0B8rAXo/d23c7ik2DB6WFpMh3klNUGe09MgG0+dhuuHSt3+hAvZ0YX0hbf04BH1YXXuh8vVXYWn9ostGHS4C6UtoMuZYv4jXxayu+xmBRLr1hRC8DB07jrxQsH2zXN9Z0YhKw4I4DcqE0BYT1jTW1iD9Ay50RTkh8b6nrG2sEOuEJc1T7IBpcNXB7jj9Ujn9cHFwVuPYaIHFxxQdOSwTAnhUvyRyuAogNpj06hxfLMRqesFvB/K2BNeyePHcOsQFzTiZnBPZaS++WmV/gDWhcprTv5JzcAKw5yB6chQ6XtYUtGLMBJPR7bch6soRALiJnyDfBn4/uQV6nUOwp8R4x2QpSz8MP1DG+ligUXiFWkSBQLa0hbrzxFwb2IT6XyF6b2CciOoN0VpigzQ1FytY1hpKjeVvH3yCVkC4bXfuQVltAsGD6ISYoEH8mZ0iTdN769zdIXxofaeGWGEgSRIu2J5SS4VgJfwEtli8l0fhpQwAAAABJRU5ErkJggg=='); background-size: 100% 100%">
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="width: 300px; margin:auto; height: 300px; border-radius:50%; background-image: url('data:image/png;base64,@Convert.ToBase64String(Model._user.UserImage)'); background-size: 100% 100%">
+                        </div>
+                    }
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="container" style="padding-bottom:16px;">
+                <h2>About Me</h2>
+                @{
+                    if (Model._user.UserDescription != null)
+                    {
+                        <p>@Model._user.UserDescription</p>
+                    }
+                    else
+                    {
+                        <p>Tell everyone about you</p>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <h1>@Model._user.Nickname</h1>
+            <p>Library Member</p>
+            <p>Email: @Model._user.Email</p>
+            <p>Library Card Number: XXXXXX</p>
+            <p>Location: City, Country</p>
+        </div>
+
+        <div class="col-md-4">
+            <h1>@Model._user.Nickname</h1>
+            <p>Library Member</p>
+            <p>Email: @Model._user.Email</p>
+            <p>Library Card Number: XXXXXX</p>
+            <p>Location: City, Country</p>
+        </div>
+    </div>
+    <div class="container mt-5" style="padding-bottom:16px;">
+        <h2>Reading List</h2>
+        <p>
+            My book shelves:
+        </p>
+        <div class="container" style="padding-bottom:16px;">
+            <div class="row">
+                <a class="card1" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 1 })">
+                    <h3>Books I've Read</h3>
+                    <div class="go-corner" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 1 })">
+                        <div class="go-arrow">
+                            →
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="row">
+                <a class="card1" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 2 })">
+                    <h3>Books I`m currently reading</h3>
+                    <div class="go-corner" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 2 })">
+                        <div class="go-arrow">
+                            →
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="row">
+                <a class="card1" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 3 })">
+                    <h3>Books I plan to read</h3>
+                    <div class="go-corner" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 3 })">
+                        <div class="go-arrow">
+                            →
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="row">
+                <a class="card1" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 4 })">
+                    <h3>Favorite books</h3>
+                    <div class="go-corner" href="@Url.Action("ShowUserBookList", "Home", new {UserId = Model._user.Id, num = 4 })">
+                        <div class="go-arrow">
+                            →
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5" style="padding-bottom:16px;">
+        <h2>Library Activity</h2>
+        <div class="card-deck">
+            @Html.Partial("/Views/Home/ShowEventList.cshtml", Model._userEventList)
+        </div>
+    </div>
+
+    <div class="container mt-5" style="padding-bottom:16px;">
+        <h2>Reading Goals</h2>
+        @{
+            if (Model._user.UserGoals != null)
+            {
+                <p>@Model._user.UserGoals</p>
+            }
+            else
+            {
+                <p>What are your goals?</p>
+            }
+        }
+    </div>
+</body>
+</html>
+

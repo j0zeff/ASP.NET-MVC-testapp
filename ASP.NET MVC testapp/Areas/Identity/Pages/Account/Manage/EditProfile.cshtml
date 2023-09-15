@@ -1,0 +1,72 @@
+﻿@page
+@model EditProfileModel
+@{
+    ViewData["Title"] = "Edit My Profile";
+    ViewData["ActivePage"] = ManageNavPages.Profile;
+}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<div class="row">
+    <div class="col-md-4">
+        <form enctype="multipart/form-data" method="post" asp-page-handler="EditProfile">
+            <input type="hidden" asp-for="@Model._user.Id" />
+            <div class="form-group">
+                <label asp-for="_firstName" class="control-label">First Name</label>
+                <input asp-for="_firstName" class="form-control" id="firstName" />
+                <span asp-validation-for="_firstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="_lastName" class="control-label">Last Name</label>
+                <input asp-for="_lastName" class="form-control" id="lastName" />
+                <span asp-validation-for="_lastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="_nickname" class="control-label">Nickname</label>
+                <input asp-for="_nickname" class="form-control" id="nickname" />
+                <span asp-validation-for="_nickname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="_userDescription" class="control-label">Description</label>
+                <input asp-for="_userDescription" class="form-control" itemid="userDescription" />
+                <span asp-validation-for="_userDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for = "_userGoals" class="control-label">Your Goals</label>
+                <input asp-for = "_userGoals" class="form-control" id="userGoals" />
+                <span asp-validation-for="_userGoals" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="_userImage" class="control-label">Avatar</label>
+                <input type="file" name="_userImage" class="form-control" id="userImage" />
+                <span asp-validation-for="_userImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="saveButton" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+@*<script>
+    $("#saveButton").click(function () {
+        var FirstName = $("#firstName").val();
+        var LastName = $("#lastName").val();
+        var Nickname = $("#nickname").val();
+        var UserDescription = $("#userDescription").val();
+        var UserGoals = $("#userGoals").val();
+        var UserImage = $("#userImage")[0].files[0];
+        $.ajax({
+            url: "/Identity/Account/Manage/EditProfile",
+            type: "POST",
+            data: {
+                UserName: FirstName,
+                UserSurname: LastName,
+                Nickname: Nickname,
+                UserDescription: UserDescription,
+                UserGoals: UserGoals,
+                UserImage: UserImage,
+            },
+        });
+    });
+</script>*@
+

@@ -7,43 +7,34 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 1 })">
+            <a class="card1" style="padding: 12px;" href="@Url.Action("ShowList", "MyBooks", new { num = 1 })">
                 <h3>Books I've Read</h3>
                 <div class="table">
                     @{
                         int i = 0;
-                        if (Model.alreadyRead.Count > 0 && i < 5)
+                        if (Model.alreadyRead.Count > 0)
                         {
                             <div class="row">
                                 <h5 class="col">Title</h5>
                                 <h5 class="col">Author</h5>
                                 <h5 class="col">Year</h5>
                             </div>
-                            foreach (var book in Model.alreadyRead)
+                            for (; i < 5 && i <= Model.alreadyRead.Count - 1; i++)
                             {
                                 <div class="row">
-                                    <p class="col">@book.Title</p>
-                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
-                                    <p class="col">@book.ReleaseDate</p>
+                                    <p class="col">@Model.alreadyRead[i].Title</p>
+                                    <p class="col">@Model.alreadyRead[i].AuthorName @Model.alreadyRead[i].AuthorSurname</p>
+                                    <p class="col">@Model.alreadyRead[i].ReleaseDate</p>
                                 </div>
-                                i++;
+                            }
+                            if (Model.alreadyRead.Count > 5)
+                            {
+                                <p style="text-align:center">.    .    .</p>
                             }
                         }
                         else
                         {
-                            <div class="row">
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                            </div>
-                            for (int j = 0; j < 5; j++)
-                            {
-                                <div class="row">
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                </div>
-                            }
+                            <p>Empty...</p>
                         }
                     }
                 </div>
@@ -55,43 +46,34 @@
             </a>
         </div>
         <div class="col-md-6">
-            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 2 })">
+            <a class="card1" style="padding: 12px;" href="@Url.Action("ShowList", "MyBooks", new { num = 2 })">
                 <h3>Books I`m currently reading</h3>
                 <div class="table">
                     @{
                         int k = 0;
-                        if (Model.currentlyReading.Count > 0 && k < 5)
+                        if (Model.currentlyReading.Count > 0)
                         {
                             <div class="row">
                                 <h5 class="col">Title</h5>
                                 <h5 class="col">Author</h5>
                                 <h5 class="col">Year</h5>
                             </div>
-                            foreach (var book in Model.currentlyReading)
-                            {
+                            for (; k < 5 && k<=Model.currentlyReading.Count-1; k++)
+                                                                            {
                                 <div class="row">
-                                    <p class="col">@book.Title</p>
-                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
-                                    <p class="col">@book.ReleaseDate</p>
+                                    <p class="col">@Model.currentlyReading[k].Title</p>
+                                    <p class="col">@Model.currentlyReading[k].AuthorName @Model.currentlyReading[k].AuthorSurname</p>
+                                    <p class="col">@Model.currentlyReading[k].ReleaseDate</p>
                                 </div>
-                                k++;
+                            }
+                            if (Model.currentlyReading.Count > 5)
+                            {
+                                <p style="text-align:center">.    .    .</p>
                             }
                         }
                         else
                         {
-                            <div class="row">
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                            </div>
-                            for (int j = 0; j < 5; j++)
-                            {
-                                <div class="row">
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                </div>
-                            }
+                            <p>Empty...</p>
                         }
                     }
                 </div>
@@ -105,43 +87,34 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 3 })">
+            <a class="card1" style="padding: 12px;" href="@Url.Action("ShowList", "MyBooks", new { num = 3 })">
                 <h3>Books I plan to read</h3>
                 <div class="table">
                     @{
                         int l = 0;
-                        if (Model.willRead.Count > 0 && l < 5)
+                        if (Model.willRead.Count > 0)
                                     {
                             <div class="row">
                                 <h5 class="col">Title</h5>
                                 <h5 class="col">Author</h5>
                                 <h5 class="col">Year</h5>
                             </div>
-                            foreach (var book in Model.willRead)
+                            for (; l < 5 && l <= Model.willRead.Count - 1; l++)
                             {
                                 <div class="row">
-                                    <p class="col">@book.Title</p>
-                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
-                                    <p class="col">@book.ReleaseDate</p>
+                                    <p class="col">@Model.willRead[l].Title</p>
+                                    <p class="col">@Model.willRead[l].AuthorName @Model.willRead[l].AuthorSurname</p>
+                                    <p class="col">@Model.willRead[l].ReleaseDate</p>
                                 </div>
-                                l++;
+                            }
+                            if (Model.willRead.Count > 5)
+                            {
+                                <p style="text-align:center">.    .    .</p>
                             }
                         }
                         else
                         {
-                            <div class="row">
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                            </div>
-                            for (int j = 0; j < 5; j++)
-                            {
-                                <div class="row">
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                </div>
-                            }
+                            <p>Empty...</p>
                         }
                     }
                 </div>
@@ -153,43 +126,34 @@
             </a>
         </div>
         <div class="col-md-6">
-            <a class="card1" href="@Url.Action("ShowList", "MyBooks", new { num = 4 })">
+            <a class="card1" style="padding: 12px;" href="@Url.Action("ShowList", "MyBooks", new { num = 4 })">
                 <h3>Favorite books</h3>
                 <div class="table">
                     @{
                         int n = 0;
-                        if (Model.favoriteBooks.Count > 0 && n < 5)
+                        if (Model.favoriteBooks.Count > 0)
                         {
                             <div class="row">
                                 <h5 class="col">Title</h5>
                                 <h5 class="col">Author</h5>
                                 <h5 class="col">Year</h5>
                             </div>
-                            foreach (var book in Model.favoriteBooks)
+                            for (; n< 5 && n <= Model.favoriteBooks.Count - 1; n++)
                             {
                                 <div class="row">
-                                    <p class="col">@book.Title</p>
-                                    <p class="col">@book.AuthorName @book.AuthorSurname</p>
-                                    <p class="col">@book.ReleaseDate</p>
+                                    <p class="col">@Model.favoriteBooks[n].Title</p>
+                                    <p class="col">@Model.favoriteBooks[n].AuthorName @Model.favoriteBooks[n].AuthorSurname</p>
+                                    <p class="col">@Model.favoriteBooks[n].ReleaseDate</p>
                                 </div>
-                                n++;
+                            }
+                            if (Model.favoriteBooks.Count > 5)
+                            {
+                                <p style="text-align:center">.    .    .</p>
                             }
                         }
                         else
                         {
-                            <div class="row">
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                                <h5 class="col"></h5>
-                            </div>
-                            for (int j = 0; j < 5; j++)
-                            {
-                                <div class="row">
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                    <p class="col"></p>
-                                </div>
-                            }
+                            <p>Empty...</p>
                         }
                     }
                 </div>

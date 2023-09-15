@@ -12,7 +12,6 @@
     <div class="row">
         <div class="col-md-4">
             <div style="width: auto; height: 480px; background-image: url('data:image/png;base64,@Convert.ToBase64String(Model.Book_image)'); background-size: 100% 100%">
-            
             </div>
             @if (User.IsInRole("Admin"))
             {
@@ -34,14 +33,14 @@
                                 <option value="currentlyReading">To Current Reading</option>
                                 <option value="willRead">To Future Read</option>
                             </select>
-                            
+
                             <button type="submit" id="showNotificationButton" class="btn btn-primary mx-2">Add to MyBook</button>
                         }
                     }
                 </form>
             }
             <div id="notification" class="alert alert-success" style="display:none; "></div>
-            
+
             <a class="btn btn-primary w-100 mt-2" asp-area="" asp-controller="Books" asp-action="IndexLib">Back to list</a>
         </div>
         <div class="col-md-8">
@@ -57,6 +56,16 @@
             <p>@Model.Pages p.</p>
             <h4>Release date:</h4>
             <p>@Model.ReleaseDate year</p>
+            <div class="row" style="margin-left:0; margin-bottom:20px;">
+                <div class="form-group col-md-4" style="padding: 0;">
+                    <input id="comment" placeholder="Add comment" for="Comment" class="form-control" />
+                </div>
+                <div class="col-md-2" style="padding: 0;">
+                    <button type="submit" id="addComment" class="btn btn-primary">→</button>
+                </div>
+            </div>
+            <div id="commentPartialView">
+            </div>
         </div>
     </div>
 </div>
@@ -76,6 +85,48 @@
                         $('#notification').text(data.message).fadeIn().delay(3000).fadeOut();
                     },
                 });
+            });
+        });
+    </script>
+    <script>
+        $('#addComment').click(function () {
+            var CommentText = $('#comment').val();
+            var BookId = @Model.BookId;
+            $.ajax({
+                type: 'POST',
+                url: '/Books/AddComment',
+                data: {
+                    BookId: BookId,
+                    CommentText: CommentText,
+                },
+                success: function () {
+                    $('#comment').val('');
+                    $.ajax({
+                        url: '/Books/CommentsPartial',
+                        type: 'GET',
+                        data: {
+                            BookId: BookId,
+                        },
+                        success: function (result) {
+                            $('#commentPartialView').html(result);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var BookId = @Model.BookId;
+            $.ajax({
+                url: '/Books/CommentsPartial',
+                type: 'GET',
+                data: {
+                    BookId: BookId,
+                },
+                success: function (result) {
+                    $('#commentPartialView').html(result);
+                }
             });
         });
     </script>

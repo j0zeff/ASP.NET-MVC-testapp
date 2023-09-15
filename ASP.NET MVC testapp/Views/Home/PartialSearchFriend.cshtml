@@ -1,0 +1,78 @@
+﻿@model List<ApplicationUser>
+<table class="table">
+        @{
+            foreach (var item in Model)
+            {
+                <tr class="table-light">
+                <td style="text-align: center; vertical-align: middle;">
+                   <a asp-controller="Home" asp-action="UserProfile" asp-route-UserId="@item.Id" style="text-decoration: none;"> <div style="width: 50px; height: 50px; border-radius:50%; background-image: url('data:image/png;base64,@Convert.ToBase64String(item.UserImage)'); background-size: 100% 100%"></div></a>
+                </td style="text-align: center; vertical-align: middle;" class="p-0">
+                    <td style="text-align: center; vertical-align: middle;" class="p-0"><p class="m-0 mt-1"><a asp-controller="Home" asp-action="UserProfile" asp-route-UserId="@item.Id" style="text-decoration: none;">@item.Nickname</a></p></td>
+                <td style="text-align: center; vertical-align: middle;" class="p-0"><p class="m-0 mt-1"><a asp-controller="Home" asp-action="UserProfile" asp-route-UserId="@item.Id" style="text-decoration: none;">@item.Firstname @item.Lastname</a></p></td>
+                    <td style="text-align: center; vertical-align: middle;" class="p-0">
+                        @if (item.IsFriend)
+                        {
+                            <p class="m-0 mt-1">Already your friend</p>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" data-recipient-id="@item.Id">Add to friend</button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+</table>
+<script>
+    $(document).ready(function () {
+        $(".btn-primary").click(function () {
+            var button = $(this);
+
+            var recipientId = button.data("recipient-id");
+
+            var data = {
+                RecipientId: recipientId
+            };
+
+            $.ajax({
+                url: "/Home/SendFriendRequest",
+                type: "POST",
+                data: data,
+                success: function (response) {
+
+                    const toastMessage = response.massege;
+
+                    const toast = document.createElement('div');
+                    toast.className = 'toast show position-absolute top-0 end-0 m-3';
+                    toast.setAttribute('role', 'alert');
+                    toast.setAttribute('aria-live', 'assertive');
+                    toast.setAttribute('aria-atomic', 'true');
+                    toast.setAttribute('data-bs-autohide', 'false');
+
+                    toast.innerHTML = `
+                                    <div class="toast-header">
+                                        <strong class="me-auto">Bootstrap</strong>
+                                        <small id="toastTimestamp"></small>
+                                        <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close">
+                                            <span aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                    <div class="toast-body" id="toastMessage">${toastMessage}</div>
+                                `;
+
+
+                    document.body.appendChild(toast);
+
+                    const myToast = new bootstrap.Toast(toast);
+                    myToast.show();
+
+                    setTimeout(function () {
+                        myToast.hide();
+                    }, 3000);
+                },
+            });
+        });
+    });
+
+</script>
+

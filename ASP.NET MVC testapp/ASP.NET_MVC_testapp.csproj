@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\lib\bootstrap\dist\css\pxfuel.jpeg" />
+    <None Include="wwwroot\js\SliderScript.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
     <PackageReference Include="MySql.Data" Version="8.0.33" />
     <PackageReference Include="MySql.Data.EntityFramework" Version="8.0.33" />
     <PackageReference Include="MySqlConnector" Version="2.2.6" />
+    <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

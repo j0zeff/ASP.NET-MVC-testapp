@@ -23,8 +23,6 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        // Customize your custom user entity configuration if needed
     }
     public DbSet<Book> Books { get; set; }
     public DbSet<ApplicationUser> AplicationUsers  { get; set; }
@@ -32,4 +30,7 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Event> Events { get; set; }
     public DbSet<EventVisitor> eventVisitors { get; set; }
     public DbSet<Genre> Genre { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Friend> Friends { get; set; }
 }

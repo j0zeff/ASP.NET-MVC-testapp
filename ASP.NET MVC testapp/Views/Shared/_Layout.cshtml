@@ -7,16 +7,42 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-stretchy.css" />
     <link rel="stylesheet" href="~/ASP.NET_MVC_testapp.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="~/js/SliderScript.js" defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/3ab9474f39.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyA9nNJH1I4BaGd-L_ySD6cgoD1hpWHZKQA",
+            authDomain: "mylovelylib.firebaseapp.com",
+            projectId: "mylovelylib",
+            storageBucket: "mylovelylib.appspot.com",
+            messagingSenderId: "723632098652",
+            appId: "1:723632098652:web:829b590971a71ae5f04599",
+            measurementId: "G-FRTTXTQZTR"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-            <div class="container-fluid" style="width: 800px; margin: 0;">
+        <nav class="navbar navbar-expand-lg p-0 bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
                 <a class="navbar-brand" style="font-size: xx-large;" asp-area="" asp-controller="Home" asp-action="Index">LIB</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -25,13 +51,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1" style="width: 150px;">
                         <li class="nav-item">
-                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px; margin: 8px 0;" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px; margin: 8px 0;" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px" asp-area="" asp-controller="Books" asp-action="IndexLib">Books</a>
+                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px; margin: 8px 0;" asp-area="" asp-controller="Books" asp-action="IndexLib">Books</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" style="font-size: 25px; padding: 8px 15px; margin: 8px 0;" asp-area="" asp-controller="Home" asp-action="Friends">Friends</a>
+                        </li>
+                        <li class="nav-item" style="height:58px">
+                            <a class="nav-link active" style="font-size: 25px; padding: 16px 15px; background-color:lightgray; color: #2a2c2e;" asp-controller="MyBooks" asp-action="Index">My Books</a>
+                        </li>
+                        <li class="nav-item" style="height:58px">
+                            <a class="nav-link active" style="font-size: 25px; padding: 20px 15px 12px 15px; margin-left:5px;" asp-controller="Books" asp-action="SearchBook"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </li>
+                        <li style="padding: 18px 15px 14px 15px; margin-left:auto;">
+                            <a style="cursor:pointer;" id="notification-icon-btn"> <i id="notification-icon" class="fa-solid fa-bell fa" style="color: #fff;"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -40,6 +78,9 @@
         </nav>
     </header>
     <div class="container">
+        <div class="col-md-8" id="notification-container">
+            <ul style="text-decoration: none;" id="notification-list"></ul>
+        </div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -52,16 +93,115 @@
             <li class="list-inline-item p-3"><a href="#"><i class="fab fa-linkedin"></i></a></li>
         </ul>
         <div class="footer-inner">
-            <p>123 Main Street, Cityville, Country</p>
-            <p>Email: contact@example.com</p>
-            <p>Phone: +1 (123) 456-7890</p>
+            <p>12 Podgorna, Poznan, Poland</p>
+            <p>Email:  noreplymylovelylib@gmail.com</p>
+            <p>Phone: +48 57 381 1762</p>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
+
 </html>
+<script>
+    function checkForNewMessages() {
+        $.ajax({
+            url: '/Home/NotificationNum',
+            type: 'GET',
+            success: function (data) {
+                const notificationIcon = $('#notification-icon');
+
+                if (data.num > 0) {
+                    notificationIcon.addClass('fa-shake');
+                } else {
+                    notificationIcon.removeClass('fa-shake');
+                }
+            },
+        });
+    }
+    setInterval(checkForNewMessages, 1500);
+</script>
+<script>
+    function loadNotifications() {
+        $.ajax({
+            url: '/Home/MyNotifications',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var notificationList = $('#notification-list');
+                notificationList.removeClass('close');
+                var closeButton = $('<button>').addClass('notification').text('CLOSE');
+                closeButton.attr('id', 'closeBtn');
+                var container = $('#notification-container');
+                notificationList.empty();
+
+                if (data.length === 0) {
+                    var noNotificationsItem = $('<li>').addClass('no-notification').text('No notifications');
+                    notificationList.append(noNotificationsItem);
+                    notificationList.append(closeButton);
+                    closeButton.on('click', function () {
+                        notificationList.addClass('close')
+                    });
+                } else {
+                    var temp = 0;
+                    data.forEach(function (notification) {
+                        var listItem = $('<li>').addClass('notification').attr('id', 'notification_' + temp);
+                        var nicknameElement = $('<div>').addClass('nickname').text('From: ' + notification.sender.nickname);
+                        var messageElement = $('<div>').addClass('message').text(notification.notification.massege);
+                        var claimButton = $('<button>').addClass('claim-button').text('✔');
+                        var notClaimButton = $('<button>').addClass('not-claim-button').text('✘');
+
+                        listItem.append(nicknameElement, messageElement, claimButton, notClaimButton);
+                        notificationList.append(listItem);
+
+                        claimButton.on('click', function () {
+                            $.ajax({
+                                url: '/Home/AnswerToRequest',
+                                type: 'POST',
+                                data: {
+                                    Claim: true,
+                                    SenderId: notification.sender.id,
+                                },
+                                success: function (data) {
+                                    loadNotifications();
+                                },
+                            });
+                        });
+
+                        notClaimButton.on('click', function () {
+                            $.ajax({
+                                url: '/Home/AnswerToRequest',
+                                type: 'POST',
+                                data: {
+                                    Claim: false,
+                                    SenderId: notification.sender.id,
+                                },
+                                success: function (data) {
+                                    loadNotifications();
+                                },
+                            });
+                        });
+                        closeButton.on('click', function () {
+                            notificationList.addClass('close')
+                        });
+                        temp += 1;
+                    });
+                    notificationList.append(closeButton);
+                }
+            },
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#notification-icon-btn').click(function () {
+            loadNotifications();
+        });
+    });
+</script>
+

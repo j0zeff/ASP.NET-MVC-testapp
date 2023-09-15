@@ -1,0 +1,133 @@
+﻿@model List<Genre>
+@{
+    ViewData["title"] = "IndexLib";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1 class="jumbotron" style="text-align:center; margin-top: 50px; margin-bottom: 50px;">LIBRARY</h1>
+<div class="row">
+    <div class="col-4">
+        <div class="book-filter">
+            <form id="bookSearchForm">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title">
+                    <br>
+                    <br>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" name="author">
+                    <br>
+                    <br>
+                </div>
+
+                <div class="form-group">
+                    <label for="genre">Genre:</label>
+                    <select id="genre" name="genre">
+                        @{
+                            <option value="">-</option>
+                            foreach (var item in Model)
+                            {
+                                <option value=@item.Genre_name>@item.Genre_name</option>
+                            }
+                        }
+                    </select>
+                    <br>
+                    <br>
+                </div>
+
+                <div class="form-group">
+                    <label for="pages">Number of Pages:</label>
+                    <input type="range" id="pages" name="pages" min="0" max="2023" step="1">
+                    <input type="number" id="pagesValue" name="pagesValue" min="0" max="2023" step="1">
+                    <br>
+                    <br>
+                </div>
+
+                <div class="form-group">
+                    <label for="pages">Release date:</label>
+                    <input type="range" id="date" name="date" min="0" max="2023" step="1">
+                    <input type="number" id="dateValue" name="dateValue" min="0" max="2023" step="1">
+                    <br>
+                    <br>
+                </div>
+                <button type="submit" style="text-align:center; margin: 0 auto;" id="search-book">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div id="book-container" class="col-8">
+    </div>
+</div>
+<script>
+    const pagesSlider = document.getElementById('pages');
+    const pagesValue = document.getElementById('pagesValue');
+
+    pagesSlider.addEventListener('input', () => {
+        pagesValue.value = pagesSlider.value;
+    });
+</script>
+
+<script>
+    const dateSlider = document.getElementById('date');
+    const dateValue = document.getElementById('dateValue');
+
+    dateSlider.addEventListener('input', () => {
+        dateValue.value = dateSlider.value;
+    });
+</script>
+    <script>
+        $("#search-book").click(function (e) {
+        e.preventDefault();
+        var Genre = $("#genre").val();
+        var Author = $("#author").val();
+        var Title = $("#title").val();
+        var PageNumber = $("#pagesValue").val();
+        var Date = $("#dateValue").val();
+
+        $.ajax({
+            url: "/Books/PartialSearchBook",
+            type: "POST",
+            data: {
+                Genre: Genre,
+                Author: Author,
+                Title: Title,
+                PageNumber: PageNumber,
+                Date: Date,
+            },
+            success: function (result) {
+                $("#book-container").html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+    </script>
+    <script>
+    $(document).ready(function () {
+        var Genre = $("#genre").val();
+        var Author = $("#author").val();
+        var Title = $("#title").val();
+        var PageNumber = $("#pagesValue").val();
+        var Date = $("#dateValue").val();
+
+        $.ajax({
+            url: "/Books/PartialSearchBook",
+            type: "POST",
+            data: {
+                Genre: Genre,
+                Author: Author,
+                Title: Title,
+                PageNumber: PageNumber,
+                Date: Date,
+            },
+            success: function (result) {
+                $("#book-container").html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+</script>
