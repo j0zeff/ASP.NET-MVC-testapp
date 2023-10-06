@@ -1,0 +1,40 @@
+﻿<Window x:Class="WPF2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF2"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Interface" Height="450" Width="500">
+    <Grid Background="Gray">
+        <Border MinWidth="400" Height="340" Background="LightGray" Margin="20" VerticalAlignment="Center" CornerRadius="20">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="Gray" ShadowDepth="5"></DropShadowEffect>
+            </Border.Effect>
+            <StackPanel x:Name="RistrationPanel" Margin="20">
+                <TextBlock Text="Authorization" HorizontalAlignment="Left"  FontSize="30"></TextBlock>
+                <Grid Margin="0 20 0 10">
+                    <Button x:Name="Loginbtn" Content="Login" MaxHeight="40" MaxWidth="100" Click="LoginView" HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}"></Button>
+                    <Button x:Name="Registerbtn" Content="Registration" MaxHeight="40" Click="RegisterView" MaxWidth="150" HorizontalAlignment="Left"></Button>
+                </Grid>
+                <StackPanel x:Name="RegisterPanel">
+                    <TextBox x:Name="Login" materialDesign:HintAssist.Hint="Your login" MinWidth="300" HorizontalAlignment="Center" TextChanged="LoginValid" Style="{StaticResource MaterialDesignFloatingHintTextBox}"></TextBox>
+                    <PasswordBox x:Name="pwd" materialDesign:HintAssist.Hint="Password" MinWidth="300" HorizontalAlignment="Center" PasswordChanged="PwdValid" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"></PasswordBox>
+                    <PasswordBox x:Name="confirmPwd" materialDesign:HintAssist.Hint="Confirm Password" MinWidth="300" HorizontalAlignment="Center" PasswordChanged="ConfirmPwdValid" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"></PasswordBox>
+                    <TextBox x:Name="Email" materialDesign:HintAssist.Hint="Your Email" TextChanged="EmailValid" MinWidth="300" HorizontalAlignment="Center" Style="{StaticResource MaterialDesignFloatingHintTextBox}"></TextBox>
+                    <Button x:Name="RegisterBtn" Content="Register" Width="300" Click="RegisterFunc" HorizontalAlignment="Center" Margin="0 20 0 0"></Button>
+                </StackPanel>
+                <StackPanel x:Name="LoginPanel" Visibility="Collapsed" Height="300">
+                    <StackPanel>
+                        <TextBox Margin="0 20 0 10" VerticalAlignment="Center" x:Name="Login_Login" materialDesign:HintAssist.Hint="Your login" MinWidth="300" HorizontalAlignment="Center" TextChanged="LoginValid" Style="{StaticResource MaterialDesignFloatingHintTextBox}"></TextBox>
+                        <PasswordBox Margin="0 10 0 0" VerticalAlignment="Center" x:Name="pwd_Login" materialDesign:HintAssist.Hint="Password" MinWidth="300" HorizontalAlignment="Center" PasswordChanged="PwdValid" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"></PasswordBox>
+                        <TextBlock Name="errorLogin" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Red" Margin="0 18 0 0" />
+                    </StackPanel>
+                    <Button x:Name="LoginBtn" Click="LoginBtn_Click" Content="Login" Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 18 0 0"></Button>
+                </StackPanel>
+            </StackPanel>
+
+        </Border>
+    </Grid>
+</Window>
