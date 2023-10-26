@@ -22,7 +22,9 @@
             {
                 <tr>
                     <td>@book.Title</td>
-                    <td>@book.AuthorName @book.AuthorSurname</td>
+                    //todo try to use @Html helpers
+                    <td>@Html.DisplayTextFor(x => book.AuthorName)
+                         @book.AuthorSurname</td>
                     <td>@book.ReleaseDate</td>
                     <td>
                         <a class="btn btn-primary mx-2" asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">Details</a>
@@ -43,6 +45,8 @@
                             }
                             else if (Model.name == "will")
                             {
+                                //use fetch to call API and handle result
+                                //http://xn--80adth0aefm3i.xn--j1amh/fetch
                                 <a class="btn btn-primary mx-2" asp-controller="MyBooks" asp-action="AddToFavorites" asp-route-bookId="@book.BookId" asp-route-IsFavorite="false" asp-route-name="will" asp-route-view="ShowList" asp-route-controller="MyBooks">Delete</a>
                             }
                         }

@@ -66,6 +66,7 @@ namespace ASP.NET_MVC_testapp.Controllers
         {
             return View();
         }
+
         public IActionResult AddToEventVisitors(int EventId)
         {
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -81,20 +82,33 @@ namespace ASP.NET_MVC_testapp.Controllers
                     };
                     _context.eventVisitors.Add(visitor);
                     _context.SaveChanges();
-                    return RedirectToRoute(new { action = "EventPage", controller = "Event", id = EventId });
+                  //  return RedirectToRoute(new { action = "EventPage", controller = "Event", id = EventId });
                 }
                 return RedirectToRoute(new { action = "EventPage", controller = "Event", id = EventId });
             }
             else
                 return NotFound();
         }
+
         [HttpGet]
         public async Task<IActionResult> EditEvent(int? id)
         {
+            //todo if you need check for existing of item please use .Any()
+            //_context.Events.Any()
             if (id == null || _context.Events == null)
             {
                 return NotFound();
             }
+
+            //if (id == null)
+            //{
+            //    return BadRequest("Wrong ID value");
+            //}
+
+            //var event = _context.Events.Find(id.Value);
+            //if(event == null)
+            //    return NotFound();
+
             var _event = _context.Events.Find(id);
 
             if (_event == null)
@@ -116,6 +130,7 @@ namespace ASP.NET_MVC_testapp.Controllers
 
             return View(eventViewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditEvent(int id, EventViewModel eventViewModel)
@@ -136,6 +151,10 @@ namespace ASP.NET_MVC_testapp.Controllers
             _event.City = eventViewModel.City;
             _event.Organizer_email = eventViewModel.Organizer_email;
             _event.Organizer_name = eventViewModel.Organizer_name;
+
+
+            //todo use null propagation
+            //eventViewModel.image_data?.Length > 0
             if (eventViewModel.image_data != null && eventViewModel.image_data.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())

@@ -17,6 +17,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ASP.NET_MVC_testapp.Controllers
 {
+    //todo apply Route attribute to define correct route to the controller
+    //[Route("api/books/my")]
+    //todo use Authorize to garantie existing of user claims
+    //[Authorize]
     public class MyBooksController : Controller
     {
         private readonly MyDbContext _context;
@@ -27,115 +31,145 @@ namespace ASP.NET_MVC_testapp.Controllers
             _context = context;
             _logger = logger;
         }
-        public IActionResult AddToFavorites(int bookId, bool IsFavorite, string name, string view, string controller, int? pageIndex)
+
+        //todo use Http Verb attribute
+        //[HttpPost("favorites")]
+        //if more that 5 argument please use class
+        public IActionResult AddToFavorites(int bookId, bool IsFavorite/*naming*/, string name, string view, string controller,/*handle redirect on UI part*/ int? pageIndex/*use default value*/)
         {
+            //create base class with CurrentUser identity and needed methods
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var temp = _context.UserFavoriteBooks.Where(b => b.user_id == currentUserId && b.book_id == bookId).ToList().FirstOrDefault();
-            if (temp != null)
+            var temp = _context.UserFavoriteBooks
+                .Where(b => b.user_id == currentUserId && b.book_id == bookId)
+                .ToList()//Get all data from db to memory by predicate
+                .FirstOrDefault();//Get first item from the list
+
+            if (temp == null)
             {
-                if (name == "favorite")
-                {
-                    if (!IsFavorite)
-                    {
-                        temp.favorite = IsFavorite;
-                        if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
-                        {
-                            _context.UserFavoriteBooks.Remove(temp);
-                        }
-                        _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 4, pageIndex = pageIndex });
-                    }
-                    else
-                    {
-                        temp.favorite = IsFavorite;
-                        _context.SaveChanges();
-                    }
-                }
-                else if (name == "current")
-                {
-                    if (!IsFavorite)
-                    {
-                        temp.currentlyReading = IsFavorite;
-                        if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
-                        {
-                            _context.UserFavoriteBooks.Remove(temp);
-                        }
-                        _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 2, pageIndex = pageIndex });
-                    }
-                    else
-                    {
-                        temp.currentlyReading = IsFavorite;
-                        _context.SaveChanges();
-                    }
-                }
-                else if (name == "will")
-                {
-                    if (!IsFavorite)
-                    {
-                        temp.willRead = IsFavorite;
-                        if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
-                        {
-                            _context.UserFavoriteBooks.Remove(temp);
-                        }
-                        _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 3, pageIndex = pageIndex});
-                    }
-                    else
-                    {
-                        temp.willRead = IsFavorite;
-                        _context.SaveChanges();
-                    }
-                }
-                else if (name == "already")
-                {
-                    if (!IsFavorite)
-                    {
-                        temp.alreadyRead = IsFavorite;
-                        if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
-                        {
-                            _context.UserFavoriteBooks.Remove(temp);
-                        }
-                        _context.SaveChanges();
-                        return RedirectToAction("ShowList", new { num = 1, pageIndex = pageIndex });
-                    }
-                    else
-                    {
-                        temp.alreadyRead = IsFavorite;
-                        _context.SaveChanges();
-                    }
-                }
-            }
-            else
-            {
+                //todo move to separate method
                 if (bookId != null && currentUserId != null)
                 {
+                    //todo best way is to use switch instead of if\else
+                    switch (name)
+                    {
+                        case "":
+                            break;
+                    }
+
+                    var favoriteBook_1 = new FavoriteBook();
+                    //
+                    //  fill favoriteBook_1 properties
+                    //
                     if (name == "favorite")
                     {
                         var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId, favorite = IsFavorite };
                         _context.UserFavoriteBooks.Add(favoriteBook);
-                        _context.SaveChanges();
                     }
                     else if (name == "current")
                     {
                         var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId, currentlyReading = IsFavorite };
                         _context.UserFavoriteBooks.Add(favoriteBook);
-                        _context.SaveChanges();
                     }
                     else if (name == "will")
                     {
                         var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId, willRead = IsFavorite };
                         _context.UserFavoriteBooks.Add(favoriteBook);
-                        _context.SaveChanges();
                     }
                     else if (name == "already")
                     {
                         var favoriteBook = new FavoriteBook { book_id = bookId, user_id = currentUserId, alreadyRead = IsFavorite };
                         _context.UserFavoriteBooks.Add(favoriteBook);
-                        _context.SaveChanges();
+
                     }
+
+                    //_context.UserFavoriteBooks.Add(favoriteBook_1);
+                    _context.SaveChanges();
+                }
+                return RedirectToRoute(new { action = view, controller = controller });
+            }
+
+
+            //todo best way is to use switch instead of if\else
+            switch (name)
+            {
+                case "":
+                    break;
+            }
+
+            if (name == "favorite")
+            {
+                //move _context.SaveChanges(); to the final row instead of code duplication in each if\else
+                if (!IsFavorite)
+                {
+                    temp.favorite = IsFavorite;
+                    if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
+                    {
+                        _context.UserFavoriteBooks.Remove(temp);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("ShowList", new { num = 4, pageIndex = pageIndex });
+                }
+                else
+                {
+                    temp.favorite = IsFavorite;
+                    _context.SaveChanges();
                 }
             }
+            else if (name == "current")
+            {
+                if (!IsFavorite)
+                {
+                    temp.currentlyReading = IsFavorite;
+                    if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
+                    {
+                        _context.UserFavoriteBooks.Remove(temp);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("ShowList", new { num = 2, pageIndex = pageIndex });
+                }
+                else
+                {
+                    temp.currentlyReading = IsFavorite;
+                    _context.SaveChanges();
+                }
+            }
+            else if (name == "will")
+            {
+                if (!IsFavorite)
+                {
+                    temp.willRead = IsFavorite;
+                    if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
+                    {
+                        _context.UserFavoriteBooks.Remove(temp);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("ShowList", new { num = 3, pageIndex = pageIndex });
+                }
+                else
+                {
+                    temp.willRead = IsFavorite;
+                    _context.SaveChanges();
+                }
+            }
+            else if (name == "already")
+            {
+                if (!IsFavorite)
+                {
+                    temp.alreadyRead = IsFavorite;
+                    if (!temp.alreadyRead && !temp.willRead && !temp.favorite && !temp.currentlyReading)
+                    {
+                        _context.UserFavoriteBooks.Remove(temp);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("ShowList", new { num = 1, pageIndex = pageIndex });
+                }
+                else
+                {
+                    temp.alreadyRead = IsFavorite;
+                    _context.SaveChanges();
+                }
+            }
+
             return RedirectToRoute(new { action = view, controller = controller });
         }
         public IActionResult Index()
@@ -252,8 +286,13 @@ namespace ASP.NET_MVC_testapp.Controllers
                 if (name == "favorite")
                 {
                     searchResults = books.favoriteBooks
-            .Where(b => b.Title.Contains(searchTerm) || b.AuthorName.Contains(searchTerm) || b.AuthorSurname.Contains(searchTerm) || b.ReleaseDate.ToString().Contains(searchTerm))
-            .ToList();
+                                        .Where(b => b.Title.Contains(searchTerm) 
+                                                    || b.AuthorName.Contains(searchTerm) 
+                                                    || b.AuthorSurname.Contains(searchTerm)
+                                                    //todo read about culture https://phrase.com/blog/posts/all-you-need-to-know-about-cultureinfo-in-net-applications/
+                                                    //not a good idea search by date using strings
+                                                    || b.ReleaseDate.ToString().Contains(searchTerm))
+                                        .ToList();
                 }
                 else if (name == "current")
                 {
@@ -289,6 +328,7 @@ namespace ASP.NET_MVC_testapp.Controllers
                 return View("IndexLib");
             }
         }
+
         [HttpPost]
         public IActionResult OnPostAddToMyBook(int bookId, string selectedOption, int? pageNumber)
         {
@@ -310,7 +350,7 @@ namespace ASP.NET_MVC_testapp.Controllers
 
                     break;
             }
-            return RedirectToRoute(new { action = "IndexLib", controller = "Books" , pageNumber = pageNumber});
+            return RedirectToRoute(new { action = "IndexLib", controller = "Books", pageNumber = pageNumber });
         }
     }
 }

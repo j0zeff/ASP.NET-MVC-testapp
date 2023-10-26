@@ -30,8 +30,10 @@ namespace ASP.NET_MVC_testapp.Controllers
 
         public async Task<IActionResult> Create(IdentityRole model)
         {
-            if(!_roleManager.RoleExistsAsync(model.Name).GetAwaiter().GetResult())
+            if(! await _roleManager.RoleExistsAsync(model.Name))
             {
+                //todo use await instead of .GetAwaiter().GetResult()
+                //await requires async and Task in method definition
                 _roleManager.CreateAsync(new IdentityRole(model.Name)).GetAwaiter().GetResult();
             }
             return RedirectToAction("Index");
